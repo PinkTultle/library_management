@@ -1,6 +1,2 @@
 BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUB,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_PRE
-980101,파이썬,김파이,동의대,25000,x,x,x,True
-20172088,갓갓승진,이승진,동의대,50000,kakao.com,x,x,True
-980103,파이썬 자바,이승진,동의대,20000,,,,True
-980104,동의,김동의,동의대,10000,,,,True
-20172089,자바,김자바,댑,25000,,,,True
+123456,f,d,f,d,f,,,False

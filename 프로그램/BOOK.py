@@ -9,49 +9,15 @@ book_table = book_table.set_index('BOOK_ISBN', drop= False)
 
 
 def add_book() : 
-    while 1:
-        try:
-            ISBN = int(input('도서 ISBN :'))
-            if str(ISBN) in book_table['BOOK_ISBN'].values :
-                print("중복된 ISBN이 이미 존재합니다.")
-            else:
-                break
-        except:
-            print("숫자 이외는 입력할 수 없습니다.")
-
-    while 1:
-        TITLE = input('도서 명 :').strip()
-        if TITLE == '':
-            print("도서명 칸은 비울 수 없습니다.")
-        else:
-            break
-
-    while 1:
-        AUTHOR = input('도서 저자 :').strip()
-        if AUTHOR == '':
-            print("저자 칸은 비울 수 없습니다.")
-        else:
-            break
-
-    while 1:
-        PUB = input('도서 출판사 :').strip()
-        if PUB == '':
-             print("출판사 칸은 비울 수 없습니다.")
-        else:
-            break
-
-    while 1:
-        try:
-            PRICE = int(input('도서 가격 :'))
-            break
-        except:
-            print("가격칸은 비울 수 없습니다.")
-
+    ISBN = int(input('도서 ISBN :'))
+    TITLE = input('도서 명 :')
+    AUTHOR = input('도서 저자 :')
+    PUB = input('도서 출판사 :')
+    PRICE = input('도서 가격 :')
     LINK = input('도서 관련링크 :')
     IMAGE = input('도서 사진 :')
     DESCRIPTION = input('도서 도서설명 :')
     PRE = True
-
 
     #현재 위치에 데이터 값을 판별하여 기본값, NULL값등을 설정
 
@@ -111,8 +77,6 @@ def edit_book() :
             colums = 'BOOK_DESCRIPTION'
         elif what_edit == 9:
             colums = 'BOOK_PRE'
-        elif what_edit < 1 or what_edit > 9:
-            print("1~9 사이를 입력해주세요.")
 
         edit_info(st_book,colums)                 
     else:
@@ -127,47 +91,8 @@ def edit_info(book, what_edit):
     print(abc)
     # print(book_table[book_table['BOOK_TITLE'] == book]['BOOK_ISBN'])
     new_values = input("새로운 값을 입력: ")
-    if what_edit == 'BOOK_ISBN':
-        if new_values in book_table['BOOK_ISBN'].values :
-            print("중복된 ISBN이 이미 존재합니다.")
-        else:
-            try:
-                new_values = int(new_values)
-                book_table[what_edit].loc[abc] = new_values
-            except:
-                print("ISBN은 숫자로 입력하세요")
-
-    elif what_edit == 'BOOK_TITLE':
-        if new_values.strip() == '':
-            print("도서명 칸을 비울 수 없습니다. ")
-        else:
-            book_table[what_edit].loc[abc] = new_values
-
-    elif what_edit == 'BOOK_AUTHOR':
-        if new_values.strip() == '':
-            print("도서저자 칸을 비울 수 없습니다. ")
-        else:
-            book_table[what_edit].loc[abc] = new_values
-
-    elif what_edit == 'BOOK_PUB':
-        if new_values.strip() == '':
-            print("도서출판사 칸을 비울 수 없습니다. ")
-        else:
-            book_table[what_edit].loc[abc] = new_values
-
-    elif what_edit == 'BOOK_PRICE':
-        if new_values.strip() == '':
-            print("도서가격 칸을 비울 수 없습니다. ")
-        else:
-            try:
-                new_values = int(new_values)
-                book_table[what_edit].loc[abc] = new_values
-            except:
-                print("가격은 숫자만 입력 가능합니다.")
-    else:
-        book_table[what_edit].loc[abc] = new_values
-
-    book_table.to_csv('csv/BOOK.csv', index=False, header=True, encoding='utf-8')
+    book_table[what_edit].loc[abc] = new_values
+    book_table.to_csv('csv/BOOK.csv', index=False, header=None, encoding='utf-8')
 
 
 def remove_book():
@@ -191,8 +116,8 @@ def inquire_book_csv():
 
 
 #search_book()
-# add_book()
-edit_book()
+#add_book()
+#edit_book()
 #remove_book()
 #reset_book_csv() 
 #inquire_book_csv()
