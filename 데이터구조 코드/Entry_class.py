@@ -114,7 +114,7 @@ class Entry_Book():
         self.entry_publish = Entry(window)
         self.entry_publish.place(x=x+170,y=y+30,width=200)
 
-        self.entry_writerh = Entry(window)
+        self.entry_writer = Entry(window)
         self.entry_writer.place(x=x+170,y=y+60,width=200)
 
         self.entry_isbn = Entry(window)
