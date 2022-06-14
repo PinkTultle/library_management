@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 from function_Add_class import Add_Book, Add_User
-from GUI_Entry_class import Entry_User
+#from GUI_Entry_class import Entry_User
 
 class MainStart() :
     def __init__(self) :
@@ -17,9 +17,9 @@ class MainStart() :
         
         self.startlabel = Label(self.win, text = "도서 관리 프로그램",font = ("궁서체",50))
         self.startlabel.place(x = 100, y = 150)
-        #self.photo = PhotoImage(file="D:\\bonobonochange.png")
-        #self.startscreen = Label(self.win,image=self.photo)
-        #self.startscreen.place(width=800,height=450)
+        self.photo = PhotoImage(file="D:\\bonobonochange.png")
+        self.startscreen = Label(self.win,image=self.photo)
+        self.startscreen.place(width=800,height=450)
 
         ### 도서 관리 메뉴
         self.mainMenu = Menu(self.win)
@@ -156,7 +156,7 @@ class MainStart() :
     ##################
     def Book_Rent (self) :
         
-     
+        self.startscreen.destroy()
         self.tree = ttk.Treeview(self.win)
 
         self.labeltitle = Label(self.win,text="도서 대여",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
@@ -197,6 +197,7 @@ class MainStart() :
     ### 도서 반납 함수
     ##################
     def Book_Return (self) :
+        self.startscreen.destroy()
         self.tree = ttk.Treeview(self.win)
 
         
@@ -239,6 +240,7 @@ class MainStart() :
     ##################
 
     def Delete_User (self) :
+        self.startscreen.destroy() 
         self.tree = ttk.Treeview(self.win)
 
         self.labeltitle = Label(self.win,text="탈퇴 회원",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
