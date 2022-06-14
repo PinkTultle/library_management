@@ -6,6 +6,9 @@ from tkinter.filedialog import askopenfilename
 #from GUI_Entry_class import Entry_User,Entry_Book
 
 ### 회원 등록 클래스
+#"프로그램\csv"
+
+User_CSV = 'csv/USER.csv'
 
 class Add_User ():
 
@@ -15,10 +18,6 @@ class Add_User ():
         self.window.geometry("500x300")
         self.window.title("신규 회원 등록")
         self.window.resizable(width = FALSE, height=FALSE)
-        
-        #self.user_add = Entry_User(self.window,x=100, y =10)
-        
-
         
     
 
@@ -42,6 +41,8 @@ class Add_User ():
         self.label_phone.place(x=x+100,y=y+90)  
         self.label_email.place(x=x+100,y=y+120)  
 
+
+        ### 엔트리 시작
         self.entry_name = Entry(self.window)
         self.entry_name.place(x=x+170,y=y,width=200)
         
@@ -70,11 +71,11 @@ class Add_User ():
         self.Tbirth_combobox.place(x=x+325,y=y+30,width=45)
         self.Tbirth_combobox.set('01')
         ##########################################
-
-        self.Men_button = Radiobutton(self.window,text="남",value=0)
+        self.Gender = StringVar(self.window)
+        self.Men_button = Radiobutton(self.window,text="남",variable=self.Gender,value='남')
         self.Men_button.place(x=x+170,y=y+70,anchor=W)
 
-        self.Girl_button = Radiobutton(self.window,text="여",value=1)
+        self.Girl_button = Radiobutton(self.window,text="여",variable=self.Gender,value='여')
         self.Girl_button.place(x=x+220,y=y+70,anchor=W)
 
         ### 전화번호를 엔트리 3개로 나눠서 받기
@@ -110,7 +111,7 @@ class Add_User ():
 
         ## 확인버튼 취소버튼
         
-        self.check_button = Button(self.window, text="등록",width =10)
+        self.check_button = Button(self.window, text="등록",width =10,command=self.Edit_User)
         self.check_button.place(x=x+60,y=y+240)
         self.cancle_button = Button(self.window,text="취소",width=10,command=self.quit)
         self.cancle_button.place(x=x+160,y=y+240)
@@ -119,6 +120,65 @@ class Add_User ():
     def quit(self) :
         self.window.quit()
         self.window.destroy()
+    
+    def Edit_User(self) :
+        self.df_User_CSV = pd.read_csv(User_CSV,encoding='CP949')
+
+        self.Name = self.entry_name.get()
+
+        self.F = self.Fbirth_combobox.get()
+        self.S = self.Sbirth_combobox.get()
+        self.T = self.Tbirth_combobox.get()
+        self.Birth = self.F + self.S + self.T
+
+        self.Sex = self.Gender.get()
+
+        self.P = self.Phone_combobox.get()
+        self.H = self.entry_phone1.get()
+        self.O = self.entry_phone2.get()
+        self.Phone = self.P + self.H + self.O
+
+        self.Email = self.entry_email.get()
+
+        ### 등록 예외처리 ###
+
+        if self.entry_name.get() == "" :
+            messagebox.showerror("이름 에러","이름을 입력해주세요")
+            return 0
+        if self.Fbirth_combobox.get() =="선택" :
+            messagebox.showerror("생년월일 에러","년도를 선택해주세요")
+            return 0
+        if self.Gender.get() == "" :
+            messagebox.showerror('성별에러','성별을 선택해주세요')
+            return 0
+        if self.Phone_combobox.get() =="선택" :
+            messagebox.showerror("전화번호 에러","지역번호를 선택해주세요")
+            return 0
+        if  not self.Phone.isdigit() :
+            messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
+            return 0
+        if len(self.entry_phone1.get()) > 5 or len(self.entry_phone2.get()) > 5:
+            messagebox.showerror("전화번호 에러", "전화번호 자리에 숫자를 5개 이상 입력하셨습니다.")
+            return 0
+        if self.entry_email.get() == "" or len(self.entry_email.get()) > 30 :
+            messagebox.showerror('이메일 에러','이메일 형식을 지켜주세요')
+            return 0
+        #USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,
+        # USER_IMAGE,USER_REG_DATE,USER_OUT_DATE,USER_RENT_CNT
+        df = pd.DataFrame.from_records([{'USER_PHONE' : self.Phone,'USER_NAME' : self.Name,'USER_BIRTH':self.Birth,'USER_SEX':self.Gender,\
+            'USER_MAIL':self.Email,'USER_IMAGE':'0','USER_REG_DATE':'0','USER_OUT_DATE':'0','USER_RENT_CNT':'0'}])
+
+        self.question = messagebox.askquestion("등록확인창",self.entry_name.get()+' , '+self.Phone+' 를 등록하겠습니까?')
+        if self.question == "yes" :
+
+            self.df_User_CSV = pd.concat([self.df_User_CSV,df])
+            self.df_User_CSV.to_csv(User_CSV,index=False,encoding='cp949')
+            messagebox.showinfo('등록완료',self.entry_name.get()+' , '+self.Phone+'이 등록되었습니다.')
+            self.window.quit()
+            self.window.destroy()
+
+        
+
       
 
 class Add_Book ():
