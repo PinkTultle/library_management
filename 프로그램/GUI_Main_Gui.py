@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 from Add_class import Add_Book, Add_User
-from Entry_class import Entry_User
+from GUI_Entry_class import Entry_User
 
 class MainStart() :
     def __init__(self) :
@@ -15,9 +15,9 @@ class MainStart() :
         self.win.resizable(width =FALSE, height = FALSE)
 
         
-        #self.startlabel = Label(self.win, text = "도서 관리 프로그램",font = ("궁서체",50))
-        #self.startlabel.place(x = 100, y = 150)
-        self.photo = PhotoImage(file="D:\\bonobonochange.png")
+        # self.startlabel = Label(self.win, text = "도서 관리 프로그램",font = ("궁서체",50))
+        # self.startlabel.place(x = 100, y = 150)
+        self.photo = PhotoImage(file="pic9.gif")
         self.startscreen = Label(self.win,image=self.photo)
         self.startscreen.place(width=800,height=450)
 
@@ -25,7 +25,7 @@ class MainStart() :
         self.mainMenu = Menu(self.win)
         self.win.config(menu = self.mainMenu)
 
-        self.fileMenu1 = Menu(self.mainMenu)
+        self.fileMenu1 = Menu(self.mainMenu, tearoff=0)
         self.mainMenu.add_cascade(label = "도서관리", menu=self.fileMenu1)
         self.fileMenu1.add_command(label ="도서등록",command=Add_Book)
         self.fileMenu1.add_separator()
@@ -37,7 +37,7 @@ class MainStart() :
 
         self.win.config(menu = self.mainMenu)
 
-        self.fileMenu2 = Menu(self.mainMenu)
+        self.fileMenu2 = Menu(self.mainMenu, tearoff=0)
         self.mainMenu.add_cascade(label = "회원관리", menu=self.fileMenu2)
         self.fileMenu2.add_command(label ="회원등록",command=Add_User)
         self.fileMenu2.add_separator()
@@ -50,7 +50,7 @@ class MainStart() :
 
         self.win.config(menu = self.mainMenu)
 
-        self.fileMenu2 = Menu(self.mainMenu)
+        self.fileMenu2 = Menu(self.mainMenu, tearoff=0)
         self.mainMenu.add_cascade(label = "대여관리", menu=self.fileMenu2)
         self.fileMenu2.add_command(label ="도서대여",command=self.Book_Rent)
         self.fileMenu2.add_separator()
