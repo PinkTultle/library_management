@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import pandas as pd
-from Entry_class import Entry_User,Entry_Book
+from GUI_Entry_class import Entry_User,Entry_Book
 
 ### 회원 등록 클래스
 

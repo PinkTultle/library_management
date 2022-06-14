@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
-from Add_class import Add_Book, Add_User
-from Entry_class import Entry_User
+from function_Add_class import Add_Book, Add_User
+from GUI_Entry_class import Entry_User
 
 class MainStart() :
     def __init__(self) :
