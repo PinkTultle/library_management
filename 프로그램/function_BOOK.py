@@ -1,5 +1,4 @@
 import pandas as pd
-# from GUI_Entry_class import Entry_Book
 
 book_field = ['BOOK_ISBN', 'BOOK_TITLE', 'BOOK_AUTHOR','BOOK_PUB','BOOK_PRICE','BOOK_LINK','BOOK_IMAGE', 'BOOK_DESCRIPTION', 'BOOK_PRE']
 #필드 명
@@ -12,7 +11,7 @@ book_table = book_table.set_index('BOOK_ISBN', drop= False)
 def add_book() : 
     while 1:
         try:
-            ISBN = input("")
+            ISBN = int(input('도서 ISBN :'))
             if str(ISBN) in book_table['BOOK_ISBN'].values :
                 print("중복된 ISBN이 이미 존재합니다.")
             else:
@@ -21,7 +20,7 @@ def add_book() :
             print("숫자 이외는 입력할 수 없습니다.")
 
     while 1:
-        TITLE = input("")
+        TITLE = input('도서 명 :').strip()
         if TITLE == '':
             print("도서명 칸은 비울 수 없습니다.")
         else:
@@ -193,7 +192,7 @@ def inquire_book_csv():
 
 #search_book()
 # add_book()
-# edit_book()
+edit_book()
 #remove_book()
 #reset_book_csv() 
 #inquire_book_csv()
