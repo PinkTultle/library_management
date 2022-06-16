@@ -17,7 +17,7 @@ class MainStart() :
         
         self.startlabel = Label(self.win, text = "도서 관리 프로그램",font = ("궁서체",50))
         self.startlabel.place(x = 100, y = 150)
-        self.photo = PhotoImage(file="D:\\bonobonochange.png")
+        self.photo = PhotoImage(file="프로그램\cat.gif")
         self.startscreen = Label(self.win,image=self.photo)
         self.startscreen.place(width=800,height=450)
 
