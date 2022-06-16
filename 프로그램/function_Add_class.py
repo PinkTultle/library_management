@@ -1,3 +1,5 @@
+from faulthandler import disable
+from pydoc import describe
 from tkinter import *
 from tkinter import messagebox
 import pandas as pd
@@ -77,6 +79,8 @@ class Add_User ():
 
         self.Girl_button = Radiobutton(self.window,text="여",variable=self.Gender,value='여')
         self.Girl_button.place(x=x+220,y=y+70,anchor=W)
+
+        self.Gender.set('')
 
         ### 전화번호를 엔트리 3개로 나눠서 받기
         a = ["010","016","011"]
