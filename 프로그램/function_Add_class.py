@@ -243,11 +243,72 @@ class Add_Book ():
 
         ## 확인버튼 취소버튼
 
-        self.check_button = Button(self.window, text="등록",width =10)
+        self.check_button = Button(self.window, text="등록",width =10,command=self.Edit_Book)
         self.check_button.place(x=x+60,y=y+355)
         self.cancle_button = Button(self.window,text="취소",width=10,command=self.quit)
         self.cancle_button.place(x=x+160,y=y+355)
         self.window.mainloop()
+
+    def Edit_Book (self) :
+        book_table = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str) #csv파일 
+
+        book_table = book_table.set_index('BOOK_ISBN', drop= False)
+
+
+        try:
+            ISBN = self.entry_isbn.get()
+            if str(ISBN) in book_table['BOOK_ISBN'].values :
+                messagebox.showinfo("경고", "중복된 ISBN이 이미 존재합니다.")
+                return
+        except:
+            messagebox.showinfo("경고", "숫자 이외는 입력할 수 없습니다.")
+
+
+        TITLE = self.entry_title.get()
+        if TITLE == '':
+            messagebox.showinfo("경고", "도서명 칸은 비울 수 없습니다.")
+            return
+
+
+        AUTHOR = self.entry_writer.get()
+        if AUTHOR == '':
+            messagebox.showinfo("경고", "저자 칸은 비울 수 없습니다.")
+            return
+
+
+        PUB = self.entry_publish.get()
+        if PUB == '':
+            messagebox.showinfo("경고", "출판사 칸은 비울 수 없습니다.")
+            return
+
+
+        try:
+            PRICE = int(self.entry_price.get())
+        except:
+            messagebox.showinfo("경고", "가격을 다시 입력해주세요.")
+            return
+
+        LINK = self.entry_link.get()
+        IMAGE = 'x'
+        DESCRIPTION = self.entry_book_info.get()
+        PRE = True
+
+
+        #현재 위치에 데이터 값을 판별하여 기본값, NULL값등을 설정
+
+        newbook = pd.DataFrame({'BOOK_ISBN' : [ISBN], 'BOOK_TITLE' : [TITLE],'BOOK_AUTHOR' : [AUTHOR],'BOOK_PUB' : [PUB],'BOOK_PRICE' : [PRICE],'BOOK_LINK' : [LINK],
+        'BOOK_IMAGE' : [IMAGE],'BOOK_DESCRIPTION' : [DESCRIPTION],'BOOK_PRE' : [PRE]})
+        self.question = messagebox.askquestion("등록확인창",self.entry_title.get()+' , '+self.entry_isbn.get()+' 를 등록하겠습니까?')
+        if self.question == "yes" :
+
+            newbook.to_csv('csv/BOOK.csv', mode='a', index = False, header= None)
+            messagebox.showinfo('등록완료',self.entry_title.get()+' , '+self.entry_isbn.get()+'이 등록되었습니다.')
+            self.window.quit()
+            self.window.destroy()
+
+        
+
+       
     
     def quit(self) :
         self.window.quit()
