@@ -1,10 +1,7 @@
-from faulthandler import disable
-from pydoc import describe
 from tkinter import *
 from tkinter import messagebox
 import pandas as pd
 from tkinter import ttk
-from tkinter.filedialog import askopenfilename
 #from GUI_Entry_class import Entry_User,Entry_Book
 
 ### 회원 등록 클래스
@@ -50,24 +47,20 @@ class Add_User ():
         
         ### 생년월일 콤보박스 
 
-        F_list = []
-        for i in range(1950,2022) :
-            m = 0
-            F_list.append(i)
-            m+=1
+        F_list = list(range(1950,2022))
+
 
         self.Fbirth_combobox = ttk.Combobox(self.window,values= F_list,state ="readonly")
         self.Fbirth_combobox.place(x=x+170,y=y+30,width=60)
         self.Fbirth_combobox.set('선택')
 
-        S_list = ['01','02','03','04','05','06','07','08','09','10','11','12']
+        S_list = list(range(1,13))
 
         self.Sbirth_combobox = ttk.Combobox(self.window,values=S_list,state ="readonly")
         self.Sbirth_combobox.place(x=x+255,y=y+30,width=45)
         self.Sbirth_combobox.set('01')
 
-        T_list = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23',\
-            '24','25','26','27','28','29','30','31']
+        T_list = list(range(1,32))
 
         self.Tbirth_combobox = ttk.Combobox(self.window,values=T_list,state ="readonly")
         self.Tbirth_combobox.place(x=x+325,y=y+30,width=45)
@@ -126,7 +119,7 @@ class Add_User ():
         self.window.destroy()
     
     def Edit_User(self) :
-        self.df_User_CSV = pd.read_csv(User_CSV,encoding='CP949')
+        self.df_User_CSV = pd.read_csv(User_CSV,encoding='utf-8')
 
         self.Name = self.entry_name.get()
 
@@ -176,7 +169,7 @@ class Add_User ():
         if self.question == "yes" :
 
             self.df_User_CSV = pd.concat([self.df_User_CSV,df])
-            self.df_User_CSV.to_csv(User_CSV,index=False,encoding='cp949')
+            self.df_User_CSV.to_csv(User_CSV,index=False,encoding='utf-8')
             messagebox.showinfo('등록완료',self.entry_name.get()+' , '+self.Phone+'이 등록되었습니다.')
             self.window.quit()
             self.window.destroy()
@@ -196,10 +189,6 @@ class Add_Book ():
 
         #self.book_add = Entry_Book(self.window,x=100, y =10)
 
-
-        
-
-    
 
         self.label_title = Label(self.window, text = "제목 : ")
         self.label_publish = Label(self.window, text = "출판사 : ")
@@ -242,9 +231,6 @@ class Add_Book ():
 
         #기본이미지
 
-        
-
-
         ## 이미지 추가 버튼 + 레이블 
         #self.proto_image = PhotoImage(file= "C:\\Users\\user\\OneDrive\\바탕 화면\\personAdd.png")
         ##self.label_image = Label(window, image=self.proto_image)
@@ -256,7 +242,6 @@ class Add_Book ():
         
 
         ## 확인버튼 취소버튼
-    
 
         self.check_button = Button(self.window, text="등록",width =10)
         self.check_button.place(x=x+60,y=y+355)
