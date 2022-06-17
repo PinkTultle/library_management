@@ -96,17 +96,15 @@ class Add_User ():
         self.entry_email = Entry(self.window)
         self.entry_email.place(x=x+170,y=y+120,width=200)
 
-        #기본이미지
-
-        
-
 
         ## 이미지 추가 버튼 + 레이블 
-        #self.proto_image = PhotoImage(file= "C:\\Users\\user\\OneDrive\\바탕 화면\\personAdd.png")
-        ##self.label_image = Label(window, image=self.proto_image)
-        #self.label_image.place(x=x-50,y=y)
+        self.default_user_image = Image.open("IMAGE\default_user.gif") # 기본이미지
+        self.default_user_image = self.default_user_image.resize((110, 140))     # 사진 크기조정
+        self.Tk_user_image = ImageTk.PhotoImage(self.default_user_image, master=self.window)   #PIL이미지 Tk의 이미지로 변환
+        self.label_user_image = Label(self.window, image=self.Tk_user_image)
+        self.label_user_image.place(x=x-62,y=y)
 
-        self.image_add_button = Button(self.window, text = "이미지 추가",width =14)
+        self.image_add_button = Button(self.window, text = "이미지 추가",width =14, command=self.insert_user_image)
         self.image_add_button.place(x=x-60,y=y+150)
 
         
@@ -123,6 +121,13 @@ class Add_User ():
         self.window.quit()
         self.window.destroy()
     
+    def insert_user_image (self):       # 이미지 불러오기 함수
+        self.userfilename = askopenfilename(parent=self.window, filetypes=(("GIF 파일", "*.gif"), ("모든 파일", "*.*")))
+        self.new_user_image = Image.open(self.userfilename)
+        self.new_user_image = self.new_user_image.resize((110, 140))
+        self.Tk_user_newimage = ImageTk.PhotoImage(self.new_user_image, master=self.window)
+        self.label_user_image.config(image=self.Tk_user_newimage)
+
     def Edit_User(self) :
         self.df_User_CSV = pd.read_csv(User_CSV,encoding='utf-8')
 
@@ -167,8 +172,10 @@ class Add_User ():
             return 0
         #USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,
         # USER_IMAGE,USER_REG_DATE,USER_OUT_DATE,USER_RENT_CNT
+        self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
+
         df = pd.DataFrame.from_records([{'USER_PHONE' : self.Phone,'USER_NAME' : self.Name,'USER_BIRTH':self.Birth,'USER_SEX':self.Gender,\
-            'USER_MAIL':self.Email,'USER_IMAGE':'0','USER_REG_DATE':'0','USER_OUT_DATE':'0','USER_RENT_CNT':'0'}])
+            'USER_MAIL':self.Email,'USER_IMAGE':"IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0','USER_OUT_DATE':'0','USER_RENT_CNT':'0'}])
 
         self.question = messagebox.askquestion("등록확인창",self.entry_name.get()+' , '+self.Phone+' 를 등록하겠습니까?')
         if self.question == "yes" :
@@ -310,11 +317,11 @@ class Add_Book ():
             return
 
         LINK = self.entry_link.get()
-        IMAGE = "IMAGE/" + str(ISBN) + ".gif"
+        IMAGE = "IMAGE/" + str(ISBN) + ".gif"       # 파일이름 ISBN으로 책이미지 csv에 주소 저장
         DESCRIPTION = self.entry_book_info.get()
         PRE = True
 
-        self.new_imageS.save("IMAGE/" + str(ISBN) + ".gif",'GIF')
+        self.new_imageS.save("IMAGE/" + str(ISBN) + ".gif",'GIF')   # 불러온 사진 등록버튼 클릭시 IMAGE폴더에 저장
 
         #현재 위치에 데이터 값을 판별하여 기본값, NULL값등을 설정
 
