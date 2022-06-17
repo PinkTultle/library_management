@@ -4,3 +4,6 @@ BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUB,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_D
 980103,파이썬 자바,이승진,동의대,20000,,,,True
 980104,동의,김동의,동의대,10000,,,,True
 20172089,자바,김자바,댑,25000,,,,True
+1010,연구실,김동의,동의대,15000,,x,,True
+20220617,파이썬싫어요,김파이,파이다,15000,www.naver.com,x,x,True
+20220618,컴퓨터개론,이강승,기한재,10000,www.deu.ac.kr,IMAGE/20220618.gif,구림,False
