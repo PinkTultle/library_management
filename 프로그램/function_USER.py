@@ -196,6 +196,6 @@ def remove_user():
 # add_user()
 #reset_user_csv()
 #search_user()
-edit_user()
+# edit_user()
 #edit_user_info()
 #remove_user()
