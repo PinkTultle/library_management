@@ -16,8 +16,18 @@ rent_table = pd.read_csv('csv/RENT.csv', names = rent_field ,encoding= 'utf-8', 
 rent_table = rent_table.set_index('RENT_ISBN', drop= False)
 
 
-def rant() :
-    stbook = input("대여할 도서 ISBN입력\n>>")
+def rant(stbook,stuser) :
+    
+    #  stuser >>> 대여자 전화번호
+
+    if stuser not in US.user_table.index :
+        print('존재하지 않는 회원입니다.')
+        return
+    elif US.user_table['USER_RENT_CNT'].all() == False :
+        print('대여가능 도서수를 채웠습니다.')
+        return
+
+    #  stbook >>> 대여할 도서 ISBN
 
     if stbook not in BO.book_table.index :
         print('존재하지 않는 책입니다.')
@@ -26,14 +36,6 @@ def rant() :
         print('현재 대여중인 책입니다.')
         return
 
-    stuser = input('당신의 전화번호를 입력해 주세요\n>>')
-
-    if stuser not in US.user_table.index :
-        print('존재하지 않는 회원입니다.')
-        return
-    elif US.user_table['USER_RENT_CNT'].all() == False :
-        print('대여가능 도서수를 채웠습니다.')
-        return
 
     new_rent = pd.DataFrame({'RENT_ISBN' : [stbook], 'RENT_USER' : [stuser],'RENTAL_DATA' : [RentDay],
     'RETURN_DATA' : [ReturnDay],'RETURN_VALUE' : [BO.book_table.loc[stbook,'BOOK_PRE']]})  
@@ -50,13 +52,13 @@ def rant() :
     print('대여를 완료하였습니다.')
 
 
-
-
-
 def Return() :
+    
     rent_table = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
     rent_table = rent_table.set_index('RENT_ISBN', drop=False)
     del_rentuser = input("반납할 회원의 전화번호를 입력하시오.\n>>")
+
+
     if del_rentuser not in rent_table['RENT_USER'].values :
         print("대여한 도서가 없습니다.")
         return
