@@ -73,6 +73,11 @@ def search_book() : # csv파일안에서 원하는 값을 찾는다.
     property = input("1 : 도서 명 \n2 : 저자\n>>")
     keyword = input("키워드를 입력하시오. \n>>")
 
+
+    '''
+    데이터프레임[df_user["USER_ISBN"].str.contains(index_key)])
+    부붐검색 코드
+    '''
     if property == '1':
         search = book_table[book_table['BOOK_TITLE'] == keyword]
     elif property == '2' :
@@ -171,14 +176,15 @@ def edit_info(book, what_edit):
 
 
 def remove_book():
-    book_table = pd.read_csv('csv\BOOK.csv', encoding= 'utf-8', dtype= str)
+    book_table = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
     book_table = book_table.set_index('BOOK_ISBN', drop=False)
     del_book = input("삭제할 도서의 이름을 입력하시오.\n>>")
     if del_book in book_table['BOOK_TITLE'].values :
             abc = str(int(book_table[book_table['BOOK_TITLE'] == del_book]['BOOK_ISBN']))
             book_table.drop(index=abc, axis=0, inplace=True)
             book_table.to_csv('csv/BOOK.csv', index=False, header= True, encoding='utf-8')
-
+    else:
+        print("존재 하지 않는 책입니다.")
 
 
 def inquire_book_csv():
@@ -192,7 +198,7 @@ def inquire_book_csv():
 #search_book()
 # add_book()
 #edit_book()
-remove_book()
+#remove_book()
 #reset_book_csv() 
 #inquire_book_csv()
 

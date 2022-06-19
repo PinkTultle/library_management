@@ -36,7 +36,6 @@ class TREE():
         #불러온 csv파일의 데이터중 출력할 데이터 열을 추출하여 새로운 데이터 프레임 생성
 
 
-        self.win.mainloop()
         
 
     def showTree(self , mode) :
@@ -55,6 +54,8 @@ class TREE():
 
         if mode == '반납':
             self.return_tree()
+        
+        self.win.mainloop()
 
 
 
@@ -221,4 +222,4 @@ class TREE():
     
 aaaa = TREE()
 
-a = aaaa.showTree('탈퇴회원')
+aaaa.showTree('도서')
