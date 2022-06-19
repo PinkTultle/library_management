@@ -164,8 +164,7 @@ class Add_User ():
         #        messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
         #        return 0
 
-        
-
+    
         if self.Fbirth_combobox.get() =="선택" :
             messagebox.showerror("생년월일 에러","년도를 선택해주세요")
             return 0
@@ -188,7 +187,7 @@ class Add_User ():
         #USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,
         # USER_IMAGE,USER_REG_DATE,USER_OUT_DATE,USER_RENT_CNT
 
-        df = pd.DataFrame.from_records([{'USER_PHONE' : str(self.Phone),'USER_NAME' : self.Name,'USER_BIRTH':self.Birth,'USER_SEX':self.Gender,\
+        df = pd.DataFrame.from_records([{'USER_PHONE' : int(self.Phone),'USER_NAME' : self.Name,'USER_BIRTH':self.Birth,'USER_SEX':self.Gender,\
             'USER_MAIL':self.Email,'USER_IMAGE':'0','USER_REG_DATE':'0','USER_OUT_DATE':'0','USER_RENT_CNT':'0'}])
 
         self.question = messagebox.askquestion("등록확인창",self.entry_name.get()+' , '+self.Phone+' 를 등록하겠습니까?')
