@@ -22,7 +22,7 @@ class Add_User ():
         self.window.geometry("500x300")
         self.window.title("신규 회원 등록")
         self.window.resizable(width = FALSE, height=FALSE)
-        
+        #self.df_User_CSV = pd.read_csv(User_CSV,encoding='CP949')
     
 
         ###레이블 선언
@@ -143,15 +143,32 @@ class Add_User ():
         self.P = self.Phone_combobox.get()
         self.H = self.entry_phone1.get()
         self.O = self.entry_phone2.get()
-        self.Phone = self.P + self.H + self.O
+        ### 0이 처음으로 시작되어 저장되면 0이 삭제되서 1을 추가하고 나중에 1을 삭제할 예정
+        self.Phone = '1'+self.P + self.H + self.O
 
         self.Email = self.entry_email.get()
 
         ### 등록 예외처리 ###
 
+        ### 전화번호 중복 처리
+        
+        
+
+        ### 공백 예외처리
         if self.entry_name.get() == "" :
             messagebox.showerror("이름 에러","이름을 입력해주세요")
             return 0
+
+        if self.Phone in self.df_User_CSV['USER_PHONE']:
+            messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
+            return 0
+
+        #for i in ignoreDF['USER_PHONE'] :
+        #    if i == self.Phone :
+        #        messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
+        #        return 0
+
+    
         if self.Fbirth_combobox.get() =="선택" :
             messagebox.showerror("생년월일 에러","년도를 선택해주세요")
             return 0
@@ -164,24 +181,33 @@ class Add_User ():
         if  not self.Phone.isdigit() :
             messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
             return 0
-        if len(self.entry_phone1.get()) > 5 or len(self.entry_phone2.get()) > 5:
+        if len(self.H) >= 5 or len(self.O) >= 5:
             messagebox.showerror("전화번호 에러", "전화번호 자리에 숫자를 5개 이상 입력하셨습니다.")
             return 0
         if self.entry_email.get() == "" or len(self.entry_email.get()) > 30 :
             messagebox.showerror('이메일 에러','이메일 형식을 지켜주세요')
             return 0
+
         #USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,
         # USER_IMAGE,USER_REG_DATE,USER_OUT_DATE,USER_RENT_CNT
+
         self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
-        df = pd.DataFrame.from_records([{'USER_PHONE' : self.Phone,'USER_NAME' : self.Name,'USER_BIRTH':self.Birth,'USER_SEX':self.Gender,\
-            'USER_MAIL':self.Email,'USER_IMAGE':"IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0','USER_OUT_DATE':'0','USER_RENT_CNT':'0'}])
+        df = pd.DataFrame.from_records([{'USER_PHONE' : self.Phone,'USER_NAME' : self.Name,
+                                         'USER_BIRTH':self.Birth,
+                                         'USER_SEX':self.Gender,
+                                         'USER_MAIL':self.Email,
+                                         'USER_IMAGE':"IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0',
+                                         'USER_OUT_DATE':'0',
+                                         'USER_RENT_CNT':'0'}])
+        
 
         self.question = messagebox.askquestion("등록확인창",self.entry_name.get()+' , '+self.Phone+' 를 등록하겠습니까?')
         if self.question == "yes" :
 
             self.df_User_CSV = pd.concat([self.df_User_CSV,df])
             self.df_User_CSV.to_csv(User_CSV,index=False,encoding='utf-8')
+            
             messagebox.showinfo('등록완료',self.entry_name.get()+' , '+self.Phone+'이 등록되었습니다.')
             self.window.quit()
             self.window.destroy()
