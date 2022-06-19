@@ -40,7 +40,7 @@ def rant() :
 
     US.user_table = US.user_table.astype({'USER_RENT_CNT':int})
     US.user_table.loc[stuser,'USER_RENT_CNT'] -= 1 
-    US.user_table.to_csv('csv/UESR.csv', mode = 'w' ,index= False, header= True)
+    US.user_table.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
 
     BO.book_table.loc[stbook,'BOOK_PRE'] = False
     BO.book_table.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
@@ -71,7 +71,7 @@ def Return() :
 
     US.user_table = US.user_table.astype({'USER_RENT_CNT':int})
     US.user_table.loc[del_rentuser,'USER_RENT_CNT'] += 1 
-    US.user_table.to_csv('csv/UESR.csv', mode = 'w' ,index= False, header= True)
+    US.user_table.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
 
     BO.book_table.loc[del_rent,'BOOK_PRE'] = True
     BO.book_table.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
@@ -86,8 +86,8 @@ def reset_rent_csv() : #csv파일을 초기화 시키는 함수
 
 
 
-#rant()
+# rant()
 
-#Return()
+Return()
 
 #reset_rent_csv()
