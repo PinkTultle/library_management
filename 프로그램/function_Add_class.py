@@ -244,7 +244,7 @@ class Add_Book ():
         #기본이미지
 
         ## 이미지 추가 버튼 + 레이블 
-        self.proto_image = Image.open("stock_1\proto_iamge.gif") # 기본이미지
+        self.proto_image = Image.open("IMAGE\proto_iamge.gif") # 기본이미지
         self.proto_images = self.proto_image.resize((110, 140))     # 사진 크기조정
         self.Tk_image = ImageTk.PhotoImage(self.proto_images, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_image = Label(self.window, image=self.Tk_image)
