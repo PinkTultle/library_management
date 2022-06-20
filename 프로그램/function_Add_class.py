@@ -97,10 +97,11 @@ class Add_User ():
 
         ## 이미지 추가 버튼 + 레이블 
         self.default_user_image = Image.open("USER_IMAGE\default_user.gif") # 기본이미지
-        self.default_user_image = self.default_user_image.resize((110, 140))     # 사진 크기조정
-        self.Tk_user_image = ImageTk.PhotoImage(self.default_user_image, master=self.window)   #PIL이미지 Tk의 이미지로 변환
+        self.new_user_image = self.default_user_image.resize((110, 140))     # 사진 크기조정
+        self.Tk_user_image = ImageTk.PhotoImage(self.new_user_image, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_user_image = Label(self.window, image=self.Tk_user_image)
         self.label_user_image.place(x=x-62,y=y)
+        self.label_user_image.config(image=self.Tk_user_image)
 
         self.image_add_button = Button(self.window, text = "이미지 추가",width =14, command=self.insert_user_image)
         self.image_add_button.place(x=x-60,y=y+150)
@@ -120,11 +121,14 @@ class Add_User ():
         self.window.destroy()
     
     def insert_user_image (self):       # 이미지 불러오기 함수
-        self.userfilename = askopenfilename(parent=self.window, filetypes=(("GIF 파일", "*.gif"), ("모든 파일", "*.*")))
-        self.new_user_image = Image.open(self.userfilename)
-        self.new_user_image = self.new_user_image.resize((110, 140))
-        self.Tk_user_newimage = ImageTk.PhotoImage(self.new_user_image, master=self.window)
-        self.label_user_image.config(image=self.Tk_user_newimage)
+        try :    
+            self.userfilename = askopenfilename(parent=self.window, filetypes=(("GIF 파일", "*.gif"), ("모든 파일", "*.*")))
+            self.new_user_image = Image.open(self.userfilename)
+            self.new_user_image = self.new_user_image.resize((110, 140))
+            self.Tk_user_newimage = ImageTk.PhotoImage(self.new_user_image, master=self.window)
+            self.label_user_image.config(image=self.Tk_user_newimage)
+        except :
+            pass
 
     def Edit_User(self) :
         self.df_User_CSV = pd.read_csv(User_CSV,encoding='utf-8')
@@ -200,6 +204,11 @@ class Add_User ():
             self.window.quit()
             self.window.destroy()
 
+    
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
+        print('빠빰')
+
         
 
       
@@ -259,8 +268,8 @@ class Add_Book ():
 
         ## 이미지 추가 버튼 + 레이블 
         self.proto_image = Image.open("BOOK_IMAGE\proto_iamge.gif") # 기본이미지
-        self.proto_images = self.proto_image.resize((110, 140))     # 사진 크기조정
-        self.Tk_image = ImageTk.PhotoImage(self.proto_images, master=self.window)   #PIL이미지 Tk의 이미지로 변환
+        self.new_imageS = self.proto_image.resize((110, 140))     # 사진 크기조정
+        self.Tk_image = ImageTk.PhotoImage(self.new_imageS, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_image = Label(self.window, image=self.Tk_image)
         self.label_image.place(x=x-62,y=y)
 
@@ -296,6 +305,8 @@ class Add_Book ():
 
         book_table = book_table.set_index('BOOK_ISBN', drop= False)
 
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
 
         TITLE = self.entry_title.get()
         if TITLE == '':

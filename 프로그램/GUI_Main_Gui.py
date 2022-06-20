@@ -1,4 +1,3 @@
-from multiprocessing.sharedctypes import Value
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
@@ -7,6 +6,12 @@ from function_Add_class import Add_Book, Add_User
 import pandas as pd
 from function_Edit import *
 #from GUI_Entry_class import Entry_User
+from datetime import datetime, timedelta
+
+Day = datetime.now()
+RentDay = Day.strftime('%Y-%m-%d')
+ReturnDay = (Day + timedelta(weeks= 2)).strftime('%Y-%m-%d')
+
 
 User_CSV = 'csv/USER.csv'
 
@@ -25,13 +30,7 @@ class MainStart() :
         self.startlabel.place(x = 100, y = 150)
 
          #각각의 csv파일 불러와서 데이터 프레임에 산입후 출력에 맞게 변경
-        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
-        self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
-
-        self.rent = self.rent[['RENT_ISBN','RENT_USER','RENTAL_DATA','RETURN_DATA','RETURN_VALUE']]
-        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
-        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
+        self.reflash()
         #불러온 csv파일의 데이터중 출력할 데이터 열을 추출하여 새로운 데이터 프레임 생성
 
         ### 도서 관리 메뉴
@@ -55,9 +54,9 @@ class MainStart() :
         self.mainMenu.add_cascade(label = "회원관리", menu=self.fileMenu2)
         self.fileMenu2.add_command(label ="회원등록",command=Add_User)
         self.fileMenu2.add_separator()
-        self.fileMenu2.add_command(label = "회원조회",command= lambda : self.Search_User(self.user,'','이름'))
+        self.fileMenu2.add_command(label = "회원조회",command= lambda : self.Search_User(self.user,'','이름','회원 조회'))
         self.fileMenu2.add_separator()
-        self.fileMenu2.add_command(label = "탈퇴회원",command= lambda : self.Search_User(self.user,'','이름'))
+        self.fileMenu2.add_command(label = "탈퇴회원",command= self.Delete_User)
 
 
         ### 대여 관리 메뉴
@@ -127,8 +126,8 @@ class MainStart() :
     ##################
     ### 회원 조회 함수
     ##################
-    def Search_User(self,print_DB,Search_key,category) :
-        self.labeltitle = Label(self.win,text="회원 조회",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
+    def Search_User(self,print_DB,Search_key,category,print_rable) :
+        self.labeltitle = Label(self.win,text=print_rable ,font=("맑은고딕", 12,"bold")).place(x=30,y=10)
         
         self.tree = ttk.Treeview(self.win)
         
@@ -278,7 +277,7 @@ class MainStart() :
     ##################
     ### 도서 대여 함수( 회원 선택)
     ##################
-    def Book_Rent (self) :
+    def Book_Rent(self) :
         
         self.tree = ttk.Treeview(self.win)
 
@@ -292,41 +291,9 @@ class MainStart() :
         self.user = self.user[self.user['USER_RENT_CNT'] != '0']
         self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
         self.user = self.user.reset_index(drop=True)
-
-
-        ##콤보박스 
-        a = ["이름","전화번호"]
-        self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
-        self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("이름")
-
-        ## 검색창
-        self.search_Entry = Entry(self.win)
-        self.search_Entry.place(x=200,y=50,width=350)
-
-        ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
-        self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
-
-        ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("전화번호","이름",'대여도서수',"이메일")
-
-        self.tree.column("#0",anchor= W ,width=50, stretch=NO)
-        self.tree.column("전화번호",anchor=W,width=150,minwidth=80, stretch=NO)
-        self.tree.column("이름",anchor=W, width=150,minwidth=80, stretch=NO)
-        self.tree.column("대여도서수",anchor=W, width=150,minwidth=80, stretch=NO)
-        self.tree.column("이메일",anchor=W, width=200)
-
-        self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("이름",text="이름",anchor=W)
-        self.tree.heading("대여도서수",text="대여도서수",anchor=W)
-        self.tree.heading("이메일",text="이메일",anchor=W)
         
-        self.tree.place(x=30,y=100,width=740,height=300)
+        self.Search_User(self.user,'','이름','도서 대여')
 
-        for i in range(len(self.user.index)) :
-            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i]))
 
     ##################
     ### 도서 반납 함수(회원 선택)
@@ -343,44 +310,7 @@ class MainStart() :
         self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
         self.user = self.user.reset_index(drop=True)
 
-        #유저_이름 // 사이에 유저가 대여한 도서수 출력하는 테이블 필요  // 유저 이메일
-        '''작업하던 부분'''
-        
-        self.labeltitle = Label(self.win,text="도서 반납",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
-        ##콤보박스 
-        a = ["이름","전화번호"]
-        self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
-        self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("이름")
-
-        ## 검색창
-        self.search_Entry = Entry(self.win)
-        self.search_Entry.place(x=200,y=50,width=350)
-
-        ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
-        self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
-
-        ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("전화번호","이름",'대여도서수',"이메일")
-
-        self.tree.column("#0",anchor= W ,width=50, stretch=NO)
-        self.tree.column("전화번호",anchor=W,width=150,minwidth=80, stretch=NO)
-        self.tree.column("이름",anchor=W, width=200,minwidth=80, stretch=NO)
-        self.tree.column("대여도서수",anchor=W, width=150,minwidth=80, stretch=NO)
-        self.tree.column("이메일",anchor=W, width=200)
-
-        self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("이름",text="이름",anchor=W)
-        self.tree.heading("대여도서수",text="대여도서수",anchor=W)
-        self.tree.heading("이메일",text="이메일",anchor=W)
-
-        for i in range(len(self.user.index)) :
-            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i]))
-        
-
-        self.tree.place(x=30,y=100,width=740,height=300)
+        self.Search_User(self.user,'','이름','도서 반납')
 
     ##################
     ### 탈퇴 회원 ui
@@ -391,41 +321,13 @@ class MainStart() :
         self.tree = ttk.Treeview(self.win)
 
         self.labeltitle = Label(self.win,text="탈퇴 회원",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
-        ##콤보박스 
-        a = ["이름","전화번호"]
-        self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
-        self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("선택")
 
-        ## 검색창
-        self.search_Entry = Entry(self.win)
-        self.search_Entry.place(x=200,y=50,width=350)
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.del_user = self.user[self.user['USER_OUT_DATE'] != '0']
+        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.del_user = self.del_user.reset_index(drop=True)
 
-        ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
-        self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
-
-        ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("탈퇴여부","회원이름","전화번호","대여권수")
-
-        self.tree.column("#0",width=0, stretch=NO)
-        self.tree.column("탈퇴여부",anchor=W, width=80)
-        self.tree.column("회원이름",anchor=W,width=120)
-        self.tree.column("전화번호",anchor=W,width=80)
-        self.tree.column("대여권수",anchor=W, width=80)
-        
-        
-
-        self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("탈퇴여부",text="탈퇴여부",anchor=W)
-        self.tree.heading("회원이름",text="회원이름",anchor=W)
-        self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("대여권수",text="대여권수",anchor=W)
-        
-        
-
-        self.tree.place(x=30,y=100,width=740,height=300)
-
+        self.Search_User(self.del_user,'','이름','탈퇴 회원')
 
         ### 도서조회 검색기능 ###
 
@@ -448,16 +350,97 @@ class MainStart() :
         if self.Phone_combobox.get() == '이름':
             self.search = self.user[self.user["USER_NAME"].str.contains(self.search_Entry.get())]
             self.search = self.search.reset_index(drop=True)
-            self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get())
+            self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
             
 
         elif self.Phone_combobox.get() == '전화번호' :
             self.search = self.user[self.user["USER_PHONE"].str.contains(self.search_Entry.get())]
             self.search = self.search.reset_index(drop=True)
-            self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get())
+            self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
 
         if self.search_Entry.get() == '':
-            self.Search_User(self.user,'',self.Phone_combobox.get())
+            self.Search_User(self.user,'',self.Phone_combobox.get(),self.labeltitle)
+
+
+    def reflash(self) : #csv 파일 다시 불러오는 파일
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
+
+        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
+
+    def rant(self,stbook,stuser) :
+
+         #  stuser >>> 대여자 전화번호
+   
+        if stuser not in self.user.index :
+            print('존재하지 않는 회원입니다.')
+            return
+        elif self.user.loc[stuser,'USER_RENT_CNT'] == '0' :
+            print('도서 가능 횟수가 없습니다.')
+            return
+
+        #  stbook >>> 대여할 도서 ISBN
+
+        if stbook not in self.book_table.index :
+            print('존재하지 않는 책입니다.')
+            return
+        elif stbook in self.rent.index :
+            print('현재 대여중인 책입니다.')
+            return
+            
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
+
+        self.new_rent = pd.DataFrame({'RENT_ISBN' : [stbook], 'RENT_USER' : [stuser],'RENTAL_DATA' : [RentDay],
+        'RETURN_DATA' : [ReturnDay],'RETURN_VALUE' : [self.book.loc[stbook,'BOOK_PRE']]})  
+
+        self.user = self.user.astype({'USER_RENT_CNT':int})
+        self.user.loc[stuser,'USER_RENT_CNT'] -= 1 
+        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
+
+        self.book.loc[stbook,'BOOK_PRE'] = False
+        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+
+        self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None) 
+    
+       
+
+
+    def Return(self,del_rentuser,del_rent) :
+    
+        # del_rentuser 반납 회원 전화번호
+        # del_rent 반납 도서 ISBN
+        self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
+        self.rent = self.rent.set_index('RENT_ISBN', drop=False)
+        del_rentuser = input("반납할 회원의 전화번호를 입력하시오.\n>>")
+
+
+        if del_rentuser not in self.rent['RENT_USER'].values :
+            print("대여한 도서가 없습니다.")
+            return
+        del_rent = input("반납할 도서의 ISBN을 입력하시오.\n>>")
+        if del_rent in self.rent['RENT_ISBN'].values :
+                abc = str(int(self.rent[self.rent['RENT_ISBN'] == del_rent]['RENT_ISBN']))
+                self.rent.drop(index=abc, axis=0, inplace=True)
+                self.rent.to_csv('csv/RENT.csv', index=False, encoding='utf-8',header= True)
+        else:
+            print("대여 하지 않은 책입니다.")
+            return
+
+        self.user_table = self.user_table.astype({'USER_RENT_CNT':int})
+        self.user_table.loc[del_rentuser,'USER_RENT_CNT'] += 1 
+        self.user_table.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True) 
+
+        self.book_table.loc[del_rent,'BOOK_PRE'] = True
+        self.book_table.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+
+
+        
+        print('반납을 완료하였습니다.')
+
        
 
 
