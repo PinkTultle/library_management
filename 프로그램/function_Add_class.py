@@ -121,11 +121,14 @@ class Add_User ():
         self.window.destroy()
     
     def insert_user_image (self):       # 이미지 불러오기 함수
-        self.userfilename = askopenfilename(parent=self.window, filetypes=(("GIF 파일", "*.gif"), ("모든 파일", "*.*")))
-        self.new_user_image = Image.open(self.userfilename)
-        self.new_user_image = self.new_user_image.resize((110, 140))
-        self.Tk_user_newimage = ImageTk.PhotoImage(self.new_user_image, master=self.window)
-        self.label_user_image.config(image=self.Tk_user_newimage)
+        try :    
+            self.userfilename = askopenfilename(parent=self.window, filetypes=(("GIF 파일", "*.gif"), ("모든 파일", "*.*")))
+            self.new_user_image = Image.open(self.userfilename)
+            self.new_user_image = self.new_user_image.resize((110, 140))
+            self.Tk_user_newimage = ImageTk.PhotoImage(self.new_user_image, master=self.window)
+            self.label_user_image.config(image=self.Tk_user_newimage)
+        except :
+            pass
 
     def Edit_User(self) :
         self.df_User_CSV = pd.read_csv(User_CSV,encoding='utf-8')
@@ -200,6 +203,11 @@ class Add_User ():
             messagebox.showinfo('등록완료',self.entry_name.get()+' , '+self.Phone+'이 등록되었습니다.')
             self.window.quit()
             self.window.destroy()
+
+    
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
+        print('빠빰')
 
         
 
@@ -297,6 +305,8 @@ class Add_Book ():
 
         book_table = book_table.set_index('BOOK_ISBN', drop= False)
 
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
 
         TITLE = self.entry_title.get()
         if TITLE == '':
