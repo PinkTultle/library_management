@@ -183,7 +183,7 @@ class Add_User ():
 
         df = pd.DataFrame.from_records([{'USER_PHONE' : str(self.Phone),'USER_NAME' : self.Name,
                                          'USER_BIRTH':self.Birth,
-                                         'USER_SEX':self.Gender,
+                                         'USER_SEX':self.Sex,
                                          'USER_MAIL':self.Email,
                                          'USER_IMAGE':"IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0',
                                          'USER_OUT_DATE':'0',
