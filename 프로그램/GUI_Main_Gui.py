@@ -147,7 +147,7 @@ class MainStart() :
         self.search_Entry.place(x=200,y=50,width=350)
 
         ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue", command= self.user_search)
+        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue", command= lambda : self.user_search(print_DB))
         self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
 
         ### 트리뷰 테이블 생성
@@ -346,20 +346,20 @@ class MainStart() :
         if self.search_Entry.get() == '':
             self.Search_book(self.book,'',self.Phone_combobox.get())
 
-    def user_search(self):
+    def user_search(self,search_DP):
         if self.Phone_combobox.get() == '이름':
-            self.search = self.user[self.user["USER_NAME"].str.contains(self.search_Entry.get())]
+            self.search = search_DP[search_DP["USER_NAME"].str.contains(self.search_Entry.get())]
             self.search = self.search.reset_index(drop=True)
             self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
             
 
         elif self.Phone_combobox.get() == '전화번호' :
-            self.search = self.user[self.user["USER_PHONE"].str.contains(self.search_Entry.get())]
+            self.search = search_DP[search_DP["USER_PHONE"].str.contains(self.search_Entry.get())]
             self.search = self.search.reset_index(drop=True)
             self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
 
         if self.search_Entry.get() == '':
-            self.Search_User(self.user,'',self.Phone_combobox.get(),self.labeltitle)
+            self.Search_User(search_DP,'',self.Phone_combobox.get(),self.labeltitle)
 
 
     def reflash(self) : #csv 파일 다시 불러오는 파일
