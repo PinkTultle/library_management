@@ -2,12 +2,15 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import tkinter
+
+from setuptools import Command
 from function_Add_class import Add_Book, Add_User
 import pandas as pd
 from function_Edit import *
 #from GUI_Entry_class import Entry_User
 from datetime import datetime, timedelta
 from function_Show import *
+from Rent_GUI import *
 
 Day = datetime.now()
 RentDay = Day.strftime('%Y-%m-%d')
@@ -205,6 +208,11 @@ class MainStart() :
         self.user = self.user.reset_index(drop=True)
         
         self.Search_User(self.user,'','이름','도서 대여')
+        self.tree.bind('<Double-Button-1>', self.rent_event)
+    
+    def rent_event(self,event) :
+        a = Rent_Table()
+        a.Load_table()
 
 
     ##################
@@ -285,23 +293,8 @@ class MainStart() :
     def rant(self,stbook,stuser) :
 
          #  stuser >>> 대여자 전화번호
-   
-        if stuser not in self.user.index :
-            print('존재하지 않는 회원입니다.')
-            return
-        elif self.user.loc[stuser,'USER_RENT_CNT'] == '0' :
-            print('도서 가능 횟수가 없습니다.')
-            return
-
         #  stbook >>> 대여할 도서 ISBN
-
-        if stbook not in self.book_table.index :
-            print('존재하지 않는 책입니다.')
-            return
-        elif stbook in self.rent.index :
-            print('현재 대여중인 책입니다.')
-            return
-            
+        print("확인")
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)

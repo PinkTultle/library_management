@@ -4,8 +4,11 @@ import pandas as pd
 
 class Rent_Table () :
 
-    def __init__(self) :
+    def __init__(self) -> None:
+        pass
 
+    
+    def Load_table(self) :
         self.wind = Tk()
         self.wind.geometry("600x400")
         self.wind.title("도서 대여")
@@ -13,14 +16,6 @@ class Rent_Table () :
 
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
         self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PUB','BOOK_PRE']]
-
-        
-        
-        
-        self.Load_table()
-        self.wind.mainloop()
-
-    def Load_table(self) :
 
         self.a = ["책 제목","ISBN 명"]
         self.C_combobox = ttk.Combobox(self.wind,values=self.a,state="readonly")
@@ -60,10 +55,37 @@ class Rent_Table () :
 
         self.book_tree.place(x=30,y=90,width=540,height=250)
 
+        self.wind.bind('<Double-Button-1>', self.rant)
+        self.wind.mainloop()
+
+        
+
+    def rant(self, event) :
+
+         #  stuser >>> 대여자 전화번호
+        #  stbook >>> 대여할 도서 ISBN
+        
+        print("확인")
+        # self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        # self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        # self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
+
+        # self.new_rent = pd.DataFrame({'RENT_ISBN' : [stbook], 'RENT_USER' : [stuser],'RENTAL_DATA' : [RentDay],
+        # 'RETURN_DATA' : [ReturnDay],'RETURN_VALUE' : [self.book.loc[stbook,'BOOK_PRE']]})  
+
+        # self.user = self.user.astype({'USER_RENT_CNT':int})
+        # self.user.loc[stuser,'USER_RENT_CNT'] -= 1 
+        # self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
+
+        # self.book.loc[stbook,'BOOK_PRE'] = False
+        # self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+
+        # self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
+
        
 
 
-abc = Rent_Table()
+
 
 
 
