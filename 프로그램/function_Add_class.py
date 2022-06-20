@@ -56,13 +56,14 @@ class Add_User ():
         self.Fbirth_combobox.place(x=x+170,y=y+30,width=60)
         self.Fbirth_combobox.set('선택')
 
-        S_list = list(range(1,13))
+        S_list = ['01','02','03','04','05','06','07','08','09','10','11','12']
 
         self.Sbirth_combobox = ttk.Combobox(self.window,values=S_list,state ="readonly")
         self.Sbirth_combobox.place(x=x+255,y=y+30,width=45)
         self.Sbirth_combobox.set('01')
 
-        T_list = list(range(1,32))
+        T_list = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23',\
+            '24','25','26','27','28','29','30','31']
 
         self.Tbirth_combobox = ttk.Combobox(self.window,values=T_list,state ="readonly")
         self.Tbirth_combobox.place(x=x+325,y=y+30,width=45)
@@ -141,31 +142,15 @@ class Add_User ():
         self.H = self.entry_phone1.get()
         self.O = self.entry_phone2.get()
         ### 0이 처음으로 시작되어 저장되면 0이 삭제되서 1을 추가하고 나중에 1을 삭제할 예정
-        self.Phone = '1'+self.P + self.H + self.O
+        self.Phone = (self.P+'-' + self.H+ '-' + self.O)
 
         self.Email = self.entry_email.get()
 
         ### 등록 예외처리 ###
-
-        ### 전화번호 중복 처리
         
-        
-
-        ### 공백 예외처리
         if self.entry_name.get() == "" :
             messagebox.showerror("이름 에러","이름을 입력해주세요")
             return 0
-
-        if self.Phone in self.df_User_CSV['USER_PHONE']:
-            messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
-            return 0
-
-        #for i in ignoreDF['USER_PHONE'] :
-        #    if i == self.Phone :
-        #        messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
-        #        return 0
-
-    
         if self.Fbirth_combobox.get() =="선택" :
             messagebox.showerror("생년월일 에러","년도를 선택해주세요")
             return 0
@@ -175,11 +160,17 @@ class Add_User ():
         if self.Phone_combobox.get() =="선택" :
             messagebox.showerror("전화번호 에러","지역번호를 선택해주세요")
             return 0
-        if  not self.Phone.isdigit() :
+        if  not self.H.isdigit() :
             messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
             return 0
-        if len(self.H) >= 5 or len(self.O) >= 5:
+        if  not self.O.isdigit() :
+            messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
+            return 0
+        if len(self.entry_phone1.get()) > 5 or len(self.entry_phone2.get()) > 5:
             messagebox.showerror("전화번호 에러", "전화번호 자리에 숫자를 5개 이상 입력하셨습니다.")
+            return 0
+        if (self.Phone) in list(self.df_User_CSV['USER_PHONE']):
+            messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
             return 0
         if self.entry_email.get() == "" or len(self.entry_email.get()) > 30 :
             messagebox.showerror('이메일 에러','이메일 형식을 지켜주세요')
@@ -190,7 +181,7 @@ class Add_User ():
 
         self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
-        df = pd.DataFrame.from_records([{'USER_PHONE' : self.Phone,'USER_NAME' : self.Name,
+        df = pd.DataFrame.from_records([{'USER_PHONE' : str(self.Phone),'USER_NAME' : self.Name,
                                          'USER_BIRTH':self.Birth,
                                          'USER_SEX':self.Gender,
                                          'USER_MAIL':self.Email,
