@@ -97,10 +97,11 @@ class Add_User ():
 
         ## 이미지 추가 버튼 + 레이블 
         self.default_user_image = Image.open("USER_IMAGE\default_user.gif") # 기본이미지
-        self.default_user_image = self.default_user_image.resize((110, 140))     # 사진 크기조정
-        self.Tk_user_image = ImageTk.PhotoImage(self.default_user_image, master=self.window)   #PIL이미지 Tk의 이미지로 변환
+        self.new_user_image = self.default_user_image.resize((110, 140))     # 사진 크기조정
+        self.Tk_user_image = ImageTk.PhotoImage(self.new_user_image, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_user_image = Label(self.window, image=self.Tk_user_image)
         self.label_user_image.place(x=x-62,y=y)
+        self.label_user_image.config(image=self.Tk_user_image)
 
         self.image_add_button = Button(self.window, text = "이미지 추가",width =14, command=self.insert_user_image)
         self.image_add_button.place(x=x-60,y=y+150)
@@ -259,8 +260,8 @@ class Add_Book ():
 
         ## 이미지 추가 버튼 + 레이블 
         self.proto_image = Image.open("BOOK_IMAGE\proto_iamge.gif") # 기본이미지
-        self.proto_images = self.proto_image.resize((110, 140))     # 사진 크기조정
-        self.Tk_image = ImageTk.PhotoImage(self.proto_images, master=self.window)   #PIL이미지 Tk의 이미지로 변환
+        self.new_imageS = self.proto_image.resize((110, 140))     # 사진 크기조정
+        self.Tk_image = ImageTk.PhotoImage(self.new_imageS, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_image = Label(self.window, image=self.Tk_image)
         self.label_image.place(x=x-62,y=y)
 
