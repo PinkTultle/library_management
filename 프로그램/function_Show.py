@@ -26,7 +26,6 @@ class Show_info:
 
         gwak = value.values.tolist()
         gwak = sum(gwak,[])
-        print(gwak)
         
 
         self.label_name = Label(self.window, text = "이름 : ")

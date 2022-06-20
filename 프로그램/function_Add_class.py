@@ -205,9 +205,6 @@ class Add_User ():
             self.window.destroy()
 
     
-        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
-        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
-        print('빠빰')
 
         
 
@@ -304,9 +301,6 @@ class Add_Book ():
         book_table = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str) #csv파일 
 
         book_table = book_table.set_index('BOOK_ISBN', drop= False)
-
-        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
 
         TITLE = self.entry_title.get()
         if TITLE == '':

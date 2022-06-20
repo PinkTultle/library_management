@@ -180,7 +180,8 @@ class MainStart() :
         self.getTable = self.tree.item(double_click).get('values')
         self.user1 = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         power = self.user1.loc[self.user1['USER_PHONE'] == self.getTable[0]]
- 
+        
+        
         sex = Show_info()
         sex.show_user(power)
 
@@ -225,7 +226,7 @@ class MainStart() :
         self.Search_User(self.user,'','이름','도서 반납')
 
     ##################
-    ### 탈퇴 회원 ui
+    ### 탈퇴 회원 ui 출력
     ##################
 
     def Delete_User (self) :
@@ -240,6 +241,20 @@ class MainStart() :
         self.del_user = self.del_user.reset_index(drop=True)
 
         self.Search_User(self.del_user,'','이름','탈퇴 회원')
+        self.tree.bind('<Double-Button-1>',self.return_user)
+
+    def return_user(self,stbook):
+
+        double_click = self.tree.focus()
+        self.getTable = self.tree.item(double_click).get('values')
+        power = self.user.loc[self.user['USER_PHONE'] == self.getTable[0]]
+
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.book.loc[stbook,'BOOK_PRE'] = '0'
+        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+        print('호잇')
+
+
 
         ### 도서조회 검색기능 ###
 
