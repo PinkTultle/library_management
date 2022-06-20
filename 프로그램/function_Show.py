@@ -204,10 +204,10 @@ class Show_info:
             messagebox.showerror('이메일 에러','이메일 형식을 지켜주세요')
             return 0
 
-        if self.new_user_image == "" :
-            self.new_user_image = Image.open(self.gwak[5])
-        else :
+        try :
             self.new_user_image = Image.open(self.userfilename)
+        except :
+            self.new_user_image = Image.open(self.gwak[5])
         
         self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
