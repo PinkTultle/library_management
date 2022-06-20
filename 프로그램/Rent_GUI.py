@@ -12,7 +12,8 @@ class Rent_Table () :
         self.wind.resizable(width =FALSE, height = FALSE)
 
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PUB']]
+        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PUB','BOOK_PRE']]
+
         
         
         
@@ -24,7 +25,7 @@ class Rent_Table () :
         self.a = ["책 제목","ISBN 명"]
         self.C_combobox = ttk.Combobox(self.wind,values=self.a,state="readonly")
         self.C_combobox.place(x=30,y=43,width=100)
-        self.C_combobox.set("선택")
+        self.C_combobox.set("책 제목")
 
         self.labeltitle = Label(self.wind,text="대여 가능한 도서",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
 
@@ -43,13 +44,16 @@ class Rent_Table () :
         self.book_tree.column("ISBN",anchor=W,width=140,minwidth=140, stretch=NO)
         self.book_tree.column("도서명",anchor=W, width=140,minwidth=140, stretch=NO)
         self.book_tree.column("저자",anchor=W, width=120,minwidth=140,stretch=NO)
-        self.book_tree.column("출판사",anchor=W, width=140,minwidth=140,stretch=NO)
+        self.book_tree.column("출판사",anchor=W, width=135,minwidth=135,stretch=NO)
         
         self.book_tree.heading("#0",text="",anchor=W)
         self.book_tree.heading("ISBN",text="ISBN",anchor=W)
         self.book_tree.heading("도서명",text="도서명",anchor=W)
         self.book_tree.heading("저자",text="저자",anchor=W)       
         self.book_tree.heading("출판사",text="출판사",anchor=W)
+
+        
+        self.book = self.book[self.book['BOOK_PRE'] != False]
 
         for i in range(len(self.book.index)) :
             self.book_tree.insert('', 'end', text=i,values=list(self.book.loc[i])) 
