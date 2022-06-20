@@ -95,7 +95,7 @@ class Add_User ():
 
 
         ## 이미지 추가 버튼 + 레이블 
-        self.default_user_image = Image.open("IMAGE\default_user.gif") # 기본이미지
+        self.default_user_image = Image.open("USER_IMAGE\default_user.gif") # 기본이미지
         self.default_user_image = self.default_user_image.resize((110, 140))     # 사진 크기조정
         self.Tk_user_image = ImageTk.PhotoImage(self.default_user_image, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_user_image = Label(self.window, image=self.Tk_user_image)
@@ -188,13 +188,13 @@ class Add_User ():
         #USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,
         # USER_IMAGE,USER_REG_DATE,USER_OUT_DATE,USER_RENT_CNT
 
-        self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
+        self.new_user_image.save("USER_IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
         df = pd.DataFrame.from_records([{'USER_PHONE' : self.Phone,'USER_NAME' : self.Name,
                                          'USER_BIRTH':self.Birth,
                                          'USER_SEX':self.Gender,
                                          'USER_MAIL':self.Email,
-                                         'USER_IMAGE':"IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0',
+                                         'USER_IMAGE':"USER_IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0',
                                          'USER_OUT_DATE':'0',
                                          'USER_RENT_CNT':'3'}])
         
@@ -267,7 +267,7 @@ class Add_Book ():
         #기본이미지
 
         ## 이미지 추가 버튼 + 레이블 
-        self.proto_image = Image.open("IMAGE\proto_iamge.gif") # 기본이미지
+        self.proto_image = Image.open("BOOK_IMAGE\proto_iamge.gif") # 기본이미지
         self.proto_images = self.proto_image.resize((110, 140))     # 사진 크기조정
         self.Tk_image = ImageTk.PhotoImage(self.proto_images, master=self.window)   #PIL이미지 Tk의 이미지로 변환
         self.label_image = Label(self.window, image=self.Tk_image)
@@ -340,11 +340,11 @@ class Add_Book ():
             return
 
         LINK = self.entry_link.get()
-        IMAGE = "IMAGE/" + str(ISBN) + ".gif"       # 파일이름 ISBN으로 책이미지 csv에 주소 저장
+        IMAGE = "BOOK_IMAGE/" + str(ISBN) + ".gif"       # 파일이름 ISBN으로 책이미지 csv에 주소 저장
         DESCRIPTION = self.entry_book_info.get()
         PRE = True
 
-        self.new_imageS.save("IMAGE/" + str(ISBN) + ".gif",'GIF')   # 불러온 사진 등록버튼 클릭시 IMAGE폴더에 저장
+        self.new_imageS.save("BOOK_IMAGE/" + str(ISBN) + ".gif",'GIF')   # 불러온 사진 등록버튼 클릭시 IMAGE폴더에 저장
 
         #현재 위치에 데이터 값을 판별하여 기본값, NULL값등을 설정
 
