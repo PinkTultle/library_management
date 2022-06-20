@@ -215,7 +215,7 @@ class MainStart() :
         double_click = self.tree.focus()
         self.getTable = self.tree.item(double_click).get('values')
         
-        a = Rent_Table()
+        a = Rent_Table(self.getTable[0])
         a.Load_table(self.getTable[0])
 
 

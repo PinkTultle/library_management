@@ -69,25 +69,29 @@ class Rent_Table :
 
     def rant(self, event ) :
 
-        stuser = self.user_num
+        self.stuser = self.user_num
 
-        double_click = self.tree.focus()
-        self.getTable = self.tree.item(double_click).get('values')
+        double_click = self.book_tree.focus()
+        self.getTable = self.book_tree.item(double_click).get('values')
         
-        stbook = self.getTable[0]
+        self.stbook = self.getTable[0]
         
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
-
-        self.new_rent = pd.DataFrame({'RENT_ISBN' : [stbook],'RENT_BOOK' : [self.book.loc[stbook,'BOOK_NAME']] ,'RENT_USER' : [stuser],'RENTAL_DATA' : [RentDay],
-        'RETURN_DATA' : [ReturnDay],'RETURN_VALUE' : [self.book.loc[stbook,'BOOK_PRE']]})  
+        print(self.book.loc[self.stbook,'BOOK_TITLE'])
+        self.new_rent = pd.DataFrame({'RENT_ISBN' : [self.book.loc[self.stbook,'BOOK_TITLE']],
+        'RENT_BOOK' : [self.book.loc[self.stbook,'BOOK_TITLE']] ,
+        'RENT_USER' : [self.stuser],
+        'RENTAL_DATA' : [RentDay],
+        'RETURN_DATA' : [ReturnDay],
+        'RETURN_VALUE' : [self.book.loc[self.stbook,'BOOK_PRE']]})  
         
         self.user = self.user.astype({'USER_RENT_CNT':int})
-        self.user.loc[stuser,'USER_RENT_CNT'] -= 1 
+        self.user.loc[self.stuser,'USER_RENT_CNT'] -= 1 
         self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
 
-        self.book.loc[stbook,'BOOK_PRE'] = False
+        self.book.loc[self.stbook,'BOOK_PRE'] = False
         self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
 
         self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
