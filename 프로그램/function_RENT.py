@@ -68,7 +68,7 @@ def Return() :
             rent_table.drop(index=abc, axis=0, inplace=True)
             rent_table.to_csv('csv/RENT.csv', index=False, encoding='utf-8',header= True)
     else:
-        print("대여 하지 않는 책입니다.")
+        print("대여 하지 않은 책입니다.")
         return
 
     US.user_table = US.user_table.astype({'USER_RENT_CNT':int})

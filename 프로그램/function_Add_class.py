@@ -1,10 +1,7 @@
-from doctest import master
-from fileinput import filename
 from tkinter import *
 from tkinter import messagebox
 import pandas as pd
 from tkinter import ttk
-import shutil
 from tkinter.filedialog import*
 from PIL import Image, ImageTk
 #from GUI_Entry_class import Entry_User,Entry_Book
@@ -199,7 +196,7 @@ class Add_User ():
                                          'USER_MAIL':self.Email,
                                          'USER_IMAGE':"USER_IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0',
                                          'USER_OUT_DATE':'0',
-                                         'USER_RENT_CNT':'0'}])
+                                         'USER_RENT_CNT':'3'}])
         
 
         self.question = messagebox.askquestion("등록확인창",self.entry_name.get()+' , '+self.Phone+' 를 등록하겠습니까?')
