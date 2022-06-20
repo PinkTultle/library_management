@@ -1,6 +1,8 @@
+from multiprocessing.sharedctypes import Value
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+import tkinter
 from function_Add_class import Add_Book, Add_User
 import pandas as pd
 from function_Edit import *
@@ -28,8 +30,8 @@ class MainStart() :
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
 
         self.rent = self.rent[['RENT_ISBN','RENT_USER','RENTAL_DATA','RETURN_DATA','RETURN_VALUE']]
-        self.book = self.book[['BOOK_IMAGE','BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
-        self.user = self.user[['USER_IMAGE','USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.book = self.book[['BOOK_ISBN','BOOK_TITLE','BOOK_AUTHOR','BOOK_PRICE','BOOK_LINK']]
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         #불러온 csv파일의 데이터중 출력할 데이터 열을 추출하여 새로운 데이터 프레임 생성
 
         ### 도서 관리 메뉴
@@ -40,7 +42,8 @@ class MainStart() :
         self.mainMenu.add_cascade(label = "도서관리", menu=self.fileMenu1)
         self.fileMenu1.add_command(label ="도서등록",command=Add_Book)
         self.fileMenu1.add_separator()
-        self.fileMenu1.add_command(label = "도서조회",command = self.Search_book)
+        #self.fileMenu1.add_command(label = "도서조회",command = self.Search_book(self.book,''))
+        self.fileMenu1.add_command(label = "도서조회",command = lambda : self.Search_book(self.book,'','책 제목'))
 
 
         ### 회원 관리 메뉴
@@ -52,9 +55,9 @@ class MainStart() :
         self.mainMenu.add_cascade(label = "회원관리", menu=self.fileMenu2)
         self.fileMenu2.add_command(label ="회원등록",command=Add_User)
         self.fileMenu2.add_separator()
-        self.fileMenu2.add_command(label = "회원조회",command=self.Search_User)
+        self.fileMenu2.add_command(label = "회원조회",command= lambda : self.Search_User(self.user,'','이름'))
         self.fileMenu2.add_separator()
-        self.fileMenu2.add_command(label = "탈퇴회원",command=self.Delete_User)
+        self.fileMenu2.add_command(label = "탈퇴회원",command= lambda : self.Search_User(self.user,'','이름'))
 
 
         ### 대여 관리 메뉴
@@ -66,31 +69,34 @@ class MainStart() :
         self.fileMenu2.add_command(label ="도서대여",command=self.Book_Rent)
         self.fileMenu2.add_separator()
         self.fileMenu2.add_command(label = "도서반납",command=self.Book_Return)
+        
         self.win.mainloop()
 
     ##################
     ### 도서 조회 함수
     ##################
-    def Search_book (self) :
+    def Search_book (self,print_DB,Search_key,category) :
         
         self.labeltitle = Label(self.win,text="도서 조회",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
        
         self.tree = ttk.Treeview(self.win)
 
-        
 
         ##콤보박스 
-        a = ["책 제목","ISBN 명"]
+        a = ["책 제목","저자"]
         self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
         self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("책 제목")
+        self.Phone_combobox.set(category)
 
         ## 검색창
-        self.search_Entry = Entry(self.win)
+        self.search_var = tkinter.StringVar()
+        self.search_var.set(Search_key)
+
+        self.search_Entry = Entry(self.win,textvariable=self.search_var)
         self.search_Entry.place(x=200,y=50,width=350)
 
         ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
+        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue", command= self.book_search)
         self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
 
         ### 트리뷰 테이블 생성
@@ -111,8 +117,8 @@ class MainStart() :
         self.tree.heading("URL",text="URL",anchor=W)
 
 
-        for i in range(len(self.book.index)) :
-            self.tree.insert('', 'end', text=i,values=list(self.book.loc[i])) 
+        for i in range(len(print_DB.index)) :
+            self.tree.insert('', 'end', text=i,values=list(print_DB.loc[i])) 
         
 
         self.tree.place(x=30,y=100,width=740,height=300)
@@ -121,7 +127,7 @@ class MainStart() :
     ##################
     ### 회원 조회 함수
     ##################
-    def Search_User (self) :
+    def Search_User(self,print_DB,Search_key,category) :
         self.labeltitle = Label(self.win,text="회원 조회",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
         
         self.tree = ttk.Treeview(self.win)
@@ -132,14 +138,17 @@ class MainStart() :
         a = ["이름","전화번호"]
         self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
         self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("이름")
+        self.Phone_combobox.set(category)
 
         ## 검색창
-        self.search_Entry = Entry(self.win)
+        self.search_var = tkinter.StringVar()
+        self.search_var.set(Search_key)
+
+        self.search_Entry = Entry(self.win,textvariable=self.search_var)
         self.search_Entry.place(x=200,y=50,width=350)
 
         ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
+        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue", command= self.user_search)
         self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
 
         ### 트리뷰 테이블 생성
@@ -159,8 +168,8 @@ class MainStart() :
         self.tree.heading("대여가능권수",text="대여가능권수",anchor=W)
         self.tree.heading("이메일",text="이메일",anchor=W)
 
-        for i in range(len(self.user.index)) :
-            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i])) 
+        for i in range(len(print_DB.index)) :
+            self.tree.insert('', 'end', text=i,values=list(print_DB.loc[i]))
 
         self.tree.bind('<ButtonRelease-1>',self.click_event)
 
@@ -416,10 +425,40 @@ class MainStart() :
         
 
         self.tree.place(x=30,y=100,width=740,height=300)
+
+
+        ### 도서조회 검색기능 ###
+
+    def book_search(self):
+        if self.Phone_combobox.get() == '책 제목':
+            self.search = self.book[self.book["BOOK_TITLE"].str.contains(self.search_Entry.get())]
+            self.search = self.search.reset_index(drop=True)
+            self.Search_book(self.search,self.search_Entry.get(),self.Phone_combobox.get())
+            
+
+        elif self.Phone_combobox.get() == '저자' :
+            self.search = self.book[self.book["BOOK_AUTHOR"].str.contains(self.search_Entry.get())]
+            self.search = self.search.reset_index(drop=True)
+            self.Search_book(self.search,self.search_Entry.get(),self.Phone_combobox.get())
+
+        if self.search_Entry.get() == '':
+            self.Search_book(self.book,'',self.Phone_combobox.get())
+
+    def user_search(self):
+        if self.Phone_combobox.get() == '이름':
+            self.search = self.user[self.user["USER_NAME"].str.contains(self.search_Entry.get())]
+            self.search = self.search.reset_index(drop=True)
+            self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get())
+            
+
+        elif self.Phone_combobox.get() == '전화번호' :
+            self.search = self.user[self.user["USER_PHONE"].str.contains(self.search_Entry.get())]
+            self.search = self.search.reset_index(drop=True)
+            self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get())
+
+        if self.search_Entry.get() == '':
+            self.Search_User(self.user,'',self.Phone_combobox.get())
        
-
-
-
 
 
 aaa = MainStart()

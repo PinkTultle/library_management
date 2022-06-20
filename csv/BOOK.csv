@@ -1,12 +1,3 @@
 BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUB,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_PRE
-980101,파이썬,김파이,동의대,25000,x,x,x,True
-20172088,갓갓승진,이승진,동의대,50000,kakao.com,x,x,True
-980103,파이썬 자바,이승진,동의대,20000,,,,True
-980104,동의,김동의,동의대,10000,,,,True
-20172089,자바,김자바,댑,25000,,,,True
-1010,연구실,김동의,동의대,15000,,x,,True
-20220618,컴퓨터개론,이강승,기한재,10000,www.deu.ac.kr,IMAGE/20220618.gif,구림,False
-123456789,냥냥 하품,남응,파이파이썬,12000,호이호이 냥냥냥,IMAGE/123456789.gif,냥이하품의 진실 그리고 위험성에 관한 논문,True
-980105,ddd,dada,adad,1231,adad,IMAGE/980105.gif,dada,True
-23415243532,fff,f2f2f2,ff2f2,123333,dddd,IMAGE/23415243532.gif,ddd,True
-3543556754,frfrf,cwec,fweew,23534654,edwefterfe,IMAGE/3543556754.gif,fwefwef,True
+12341234132,냥냥 라이온,두현,512호,12000,하하,BOOK_IMAGE/12341234132.gif,반가워용,True
+12345,호이호이,빠밥ㅁ,냥냥,123333,dada,BOOK_IMAGE/12345.gif,dada,True
