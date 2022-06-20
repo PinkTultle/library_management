@@ -113,10 +113,6 @@ class MainStart() :
         self.tree.place(x=30,y=100,width=740,height=300)
 
         
-        
-
-        
-
     ##################
     ### 회원 조회 함수
     ##################
@@ -234,13 +230,24 @@ class MainStart() :
         self.tree.place(x=30,y=100,width=740,height=300)
 
     ##################
-    ### 도서 대여 함수
+    ### 도서 대여 함수( 회원 선택)
     ##################
     def Book_Rent (self) :
         
         self.tree = ttk.Treeview(self.win)
 
         self.labeltitle = Label(self.win,text="도서 대여",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
+
+        #트리뷰 출력을 위한 데이터 프레임 생성 및 추출
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        #
+        #대여가능 권수가 남아있는 회원만 추출하는 부분
+        #
+        self.user = self.user[self.user['USER_RENT_CNT'] != '0']
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.user = self.user.reset_index()
+
+
         ##콤보박스 
         a = ["이름","전화번호"]
         self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
@@ -256,30 +263,40 @@ class MainStart() :
         self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
 
         ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("회원이름","전화번호","대여권수","성별")
+        self.tree['columns'] = ("전화번호","이름","이메일")
 
-        self.tree.column("#0",width=0, stretch=NO)
-        self.tree.column("회원이름",anchor=W,width=120)
-        self.tree.column("전화번호",anchor=W,width=80)
-        self.tree.column("대여권수",anchor=W, width=80)
-        self.tree.column("성별",anchor=W, width=80)
-        
+        self.tree.column("#0",anchor= W ,width=50, stretch=NO)
+        self.tree.column("전화번호",anchor=W,width=200,minwidth=80, stretch=NO)
+        self.tree.column("이름",anchor=W, width=200,minwidth=80, stretch=NO)
+        self.tree.column("이메일",anchor=W, width=250)
 
         self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("회원이름",text="회원이름",anchor=W)
         self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("대여권수",text="대여권수",anchor=W)
-        self.tree.heading("성별",text="성별",anchor=W)
+        self.tree.heading("이름",text="이름",anchor=W)
+        self.tree.heading("이메일",text="이메일",anchor=W)
         
-
         self.tree.place(x=30,y=100,width=740,height=300)
 
+        for i in range(len(self.user.index)) :
+            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i]))
+
     ##################
-    ### 도서 반납 함수
+    ### 도서 반납 함수(회원 선택)
     ##################
     def Book_Return (self) :
         self.tree = ttk.Treeview(self.win)
 
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        #
+        #렌트테이블에 있는 회원만 검색, 추출필요 혹은 유저 테이블에 대여가능 권수가 3이 아닌 회원만 추출
+        #
+        self.user = self.user[self.user['USER_RENT_CNT'] != '3']
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.user = self.user.reset_index()
+
+        #유저_이름 // 사이에 유저가 대여한 도서수 출력하는 테이블 필요  // 유저 이메일
+        '''작업하던 부분'''
         
         self.labeltitle = Label(self.win,text="도서 반납",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
         ##콤보박스 
@@ -297,20 +314,22 @@ class MainStart() :
         self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
 
         ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("회원이름","전화번호","대여권수","성별")
+        self.tree['columns'] = ("전화번호","이름",'대여도서수',"이메일")
 
-        self.tree.column("#0",width=0, stretch=NO)
-        self.tree.column("회원이름",anchor=W,width=120)
-        self.tree.column("전화번호",anchor=W,width=80)
-        self.tree.column("대여권수",anchor=W, width=80)
-        self.tree.column("성별",anchor=W, width=80)
-        
+        self.tree.column("#0",anchor= W ,width=50, stretch=NO)
+        self.tree.column("전화번호",anchor=W,width=200,minwidth=80, stretch=NO)
+        self.tree.column("이름",anchor=W, width=200,minwidth=80, stretch=NO)
+        self.tree.column("대여도서수",anchor=W, width=150,minwidth=80, stretch=NO)
+        self.tree.column("이메일",anchor=W, width=250)
 
         self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("회원이름",text="회원이름",anchor=W)
         self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("대여권수",text="대여권수",anchor=W)
-        self.tree.heading("성별",text="성별",anchor=W)
+        self.tree.heading("이름",text="이름",anchor=W)
+        self.tree.heading("대여도서수",text="대여도서수",anchor=W)
+        self.tree.heading("이메일",text="이메일",anchor=W)
+
+        for i in range(len(self.user.index)) :
+            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i]))
         
 
         self.tree.place(x=30,y=100,width=740,height=300)
