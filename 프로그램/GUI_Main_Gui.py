@@ -1,4 +1,3 @@
-from multiprocessing.sharedctypes import Value
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
@@ -278,7 +277,7 @@ class MainStart() :
     ##################
     ### 도서 대여 함수( 회원 선택)
     ##################
-    def Book_Rent (self) :
+    def Book_Rent(self) :
         
         self.tree = ttk.Treeview(self.win)
 
@@ -292,41 +291,9 @@ class MainStart() :
         self.user = self.user[self.user['USER_RENT_CNT'] != '0']
         self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
         self.user = self.user.reset_index(drop=True)
-
-
-        ##콤보박스 
-        a = ["이름","전화번호"]
-        self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
-        self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("이름")
-
-        ## 검색창
-        self.search_Entry = Entry(self.win)
-        self.search_Entry.place(x=200,y=50,width=350)
-
-        ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
-        self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
-
-        ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("전화번호","이름",'대여도서수',"이메일")
-
-        self.tree.column("#0",anchor= W ,width=50, stretch=NO)
-        self.tree.column("전화번호",anchor=W,width=150,minwidth=80, stretch=NO)
-        self.tree.column("이름",anchor=W, width=150,minwidth=80, stretch=NO)
-        self.tree.column("대여도서수",anchor=W, width=150,minwidth=80, stretch=NO)
-        self.tree.column("이메일",anchor=W, width=200)
-
-        self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("이름",text="이름",anchor=W)
-        self.tree.heading("대여도서수",text="대여도서수",anchor=W)
-        self.tree.heading("이메일",text="이메일",anchor=W)
         
-        self.tree.place(x=30,y=100,width=740,height=300)
+        self.Search_User(self.user,'','이름')
 
-        for i in range(len(self.user.index)) :
-            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i]))
 
     ##################
     ### 도서 반납 함수(회원 선택)
@@ -345,42 +312,7 @@ class MainStart() :
 
         #유저_이름 // 사이에 유저가 대여한 도서수 출력하는 테이블 필요  // 유저 이메일
         '''작업하던 부분'''
-        
-        self.labeltitle = Label(self.win,text="도서 반납",font=("맑은고딕", 12,"bold")).place(x=30,y=10)
-        ##콤보박스 
-        a = ["이름","전화번호"]
-        self.Phone_combobox = ttk.Combobox(self.win,values=a,state="readonly")
-        self.Phone_combobox.place(x=30,y=50,width=100)
-        self.Phone_combobox.set("이름")
-
-        ## 검색창
-        self.search_Entry = Entry(self.win)
-        self.search_Entry.place(x=200,y=50,width=350)
-
-        ### 검색 버튼
-        self.Spec_Search_button = Button(self.win,text="검색",bg="lightsteelblue")
-        self.Spec_Search_button.place(x=650,y=45,width=80,height=30)
-
-        ### 트리뷰 테이블 생성
-        self.tree['columns'] = ("전화번호","이름",'대여도서수',"이메일")
-
-        self.tree.column("#0",anchor= W ,width=50, stretch=NO)
-        self.tree.column("전화번호",anchor=W,width=150,minwidth=80, stretch=NO)
-        self.tree.column("이름",anchor=W, width=200,minwidth=80, stretch=NO)
-        self.tree.column("대여도서수",anchor=W, width=150,minwidth=80, stretch=NO)
-        self.tree.column("이메일",anchor=W, width=200)
-
-        self.tree.heading("#0",text="",anchor=W)
-        self.tree.heading("전화번호",text="전화번호",anchor=W)
-        self.tree.heading("이름",text="이름",anchor=W)
-        self.tree.heading("대여도서수",text="대여도서수",anchor=W)
-        self.tree.heading("이메일",text="이메일",anchor=W)
-
-        for i in range(len(self.user.index)) :
-            self.tree.insert('', 'end', text=i,values=list(self.user.loc[i]))
-        
-
-        self.tree.place(x=30,y=100,width=740,height=300)
+        self.Search_User(self.user,'','이름')
 
     ##################
     ### 탈퇴 회원 ui
