@@ -8,13 +8,10 @@ from function_Add_class import Add_Book, Add_User
 import pandas as pd
 from function_Edit import *
 #from GUI_Entry_class import Entry_User
-from datetime import datetime, timedelta
 from function_Show import *
 from Rent_GUI import *
 
-Day = datetime.now()
-RentDay = Day.strftime('%Y-%m-%d')
-ReturnDay = (Day + timedelta(weeks= 2)).strftime('%Y-%m-%d')
+
 
 
 User_CSV = 'csv/USER.csv'
@@ -131,11 +128,13 @@ class MainStart() :
     ### 회원 조회 함수
     ##################
     def Search_User(self,print_DB,Search_key,category,print_rable) :
+
+
         self.labeltitle = Label(self.win,text=print_rable ,font=("맑은고딕", 12,"bold")).place(x=30,y=10)
         
         self.tree = ttk.Treeview(self.win)
         
-
+        self.reflash()
 
         ##콤보박스 
         a = ["이름","전화번호"]
@@ -205,15 +204,19 @@ class MainStart() :
         #대여가능 권수가 남아있는 회원만 추출하는 부분
         #
         self.user = self.user[self.user['USER_RENT_CNT'] != '0']
-        self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         self.user = self.user.reset_index(drop=True)
         
         self.Search_User(self.user,'','이름','도서 대여')
         self.tree.bind('<Double-Button-1>', self.rent_event)
     
     def rent_event(self,event) :
+
+        double_click = self.tree.focus()
+        self.getTable = self.tree.item(double_click).get('values')
+        
         a = Rent_Table()
-        a.Load_table()
+        a.Load_table(self.getTable[0])
 
 
     ##################

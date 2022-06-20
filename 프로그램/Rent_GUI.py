@@ -1,14 +1,21 @@
 from tkinter import *
 from tkinter import ttk
 import pandas as pd
+from datetime import datetime, timedelta
 
-class Rent_Table () :
 
-    def __init__(self) -> None:
-        pass
+Day = datetime.now()
+RentDay = Day.strftime('%Y-%m-%d')
+ReturnDay = (Day + timedelta(weeks= 2)).strftime('%Y-%m-%d')
+
+
+class Rent_Table :
+
+    def __init__(self, num):
+        self.user_num = num
 
     
-    def Load_table(self) :
+    def Load_table(self, num) :
         self.wind = Tk()
         self.wind.geometry("600x400")
         self.wind.title("도서 대여")
@@ -60,32 +67,27 @@ class Rent_Table () :
 
         
 
-    def rant(self, event) :
+    def rant(self, event ) :
 
-         #  stuser >>> 대여자 전화번호
-        #  stbook >>> 대여할 도서 ISBN
+        stuser = self.user_num
+
+        double_click = self.tree.focus()
+        self.getTable = self.tree.item(double_click).get('values')
         
-        print("확인")
-        # self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        # self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
-        # self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
+        stbook = self.getTable[0]
+        
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
 
-        # self.new_rent = pd.DataFrame({'RENT_ISBN' : [stbook], 'RENT_USER' : [stuser],'RENTAL_DATA' : [RentDay],
-        # 'RETURN_DATA' : [ReturnDay],'RETURN_VALUE' : [self.book.loc[stbook,'BOOK_PRE']]})  
+        self.new_rent = pd.DataFrame({'RENT_ISBN' : [stbook],'RENT_BOOK' : [self.book.loc[stbook,'BOOK_NAME']] ,'RENT_USER' : [stuser],'RENTAL_DATA' : [RentDay],
+        'RETURN_DATA' : [ReturnDay],'RETURN_VALUE' : [self.book.loc[stbook,'BOOK_PRE']]})  
+        
+        self.user = self.user.astype({'USER_RENT_CNT':int})
+        self.user.loc[stuser,'USER_RENT_CNT'] -= 1 
+        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
 
-        # self.user = self.user.astype({'USER_RENT_CNT':int})
-        # self.user.loc[stuser,'USER_RENT_CNT'] -= 1 
-        # self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
+        self.book.loc[stbook,'BOOK_PRE'] = False
+        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
 
-        # self.book.loc[stbook,'BOOK_PRE'] = False
-        # self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
-
-        # self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
-
-       
-
-
-
-
-
-
+        self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
