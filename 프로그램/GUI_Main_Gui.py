@@ -8,6 +8,8 @@ import csv
 from PIL import Image, ImageTk
 #from GUI_Entry_class import Entry_User
 
+User_CSV = 'csv/USER.csv'
+
 class MainStart() :
     def __init__(self) :
 
