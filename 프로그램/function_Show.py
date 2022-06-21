@@ -212,7 +212,7 @@ class Show_info:
         self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
         
-        df_user["USER_IMAGE"].loc[self.gwak[0]] = "IMAGE/" + str(self.Phone) + ".gif"
+        df_user["USER_IMAGE"].loc[self.gwak[0]] = "USER_IMAGE/" + str(self.Phone) + ".gif"
         df_user.to_csv(User_CSV, index=False, encoding='utf-8')
 
         messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
