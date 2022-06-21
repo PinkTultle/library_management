@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter
 import pandas as pd
 from datetime import datetime, timedelta
+from tkinter import messagebox
 
 
 Day = datetime.now()
@@ -60,9 +61,9 @@ class Rent_Table :
         self.book_tree.heading("출판사",text="출판사",anchor=W)
 
         
-        self.book = self.book[self.book['BOOK_PRE'] != False]
+        self.book = self.book[self.book['BOOK_PRE'] == 'True']
 
-        for i in range(len(self.book.index)) :
+        for i in self.book.index.tolist() :
             self.book_tree.insert('', 'end', text=i,values=list(self.book.loc[i])) 
 
         self.book_tree.place(x=30,y=90,width=540,height=250)
@@ -94,7 +95,7 @@ class Rent_Table :
         'RETURN_DATA' : [ReturnDay],
         'RETURN_VALUE' : [self.book.loc[self.stbook,'BOOK_PRE']]})
         self.new_rent = self.new_rent.set_index('RENT_ISBN', drop=False) 
-        #
+
         self.user = self.user.astype({'USER_RENT_CNT':int})
         self.user.loc[self.stuser,'USER_RENT_CNT'] -= 1 
         self.user.to_csv('csv/USER.csv', mode = 'w' ,index= None, header= True)
@@ -103,6 +104,7 @@ class Rent_Table :
         self.book.to_csv('csv/BOOK.csv', mode= 'w', index= None, header= True)
 
         self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
+<<<<<<< HEAD
 
 
     def Load_return_table(self, Search_key) :
@@ -183,3 +185,13 @@ class Rent_Table :
         self.rent.loc[(self.rent['RENT_USER'] == self.stuser)]
         print(self.rent)
         #self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
+=======
+        messagebox.showinfo("도서대여", "도서 대여 성공")
+        self.quit()
+
+
+    def quit(self) :
+        self.wind.quit()
+        self.wind.destroy()
+        
+>>>>>>> e5ab1f6ed4b939c711daa7b40e2427b4600d1670
