@@ -181,7 +181,7 @@ class Add_User ():
             return 0
 
         #USER_PHONE,USER_NAME,USER_BIRTH,USER_SEX,USER_MAIL,
-        # USER_IMAGE,USER_REG_DATE,USER_OUT_DATE,USER_RENT_CNT
+        # USER_IMAGE,USER_OUT_DATE,USER_RENT_CNT
 
         self.new_user_image.save("USER_IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
@@ -189,7 +189,7 @@ class Add_User ():
                                          'USER_BIRTH':self.Birth,
                                          'USER_SEX':self.Sex,
                                          'USER_MAIL':self.Email,
-                                         'USER_IMAGE':"USER_IMAGE/" + str(self.Phone) + ".gif",'USER_REG_DATE':'0',
+                                         'USER_IMAGE':"USER_IMAGE/" + str(self.Phone) + ".gif",
                                          'USER_OUT_DATE':'0',
                                          'USER_RENT_CNT':'3'}])
         
