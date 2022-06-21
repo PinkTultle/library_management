@@ -77,11 +77,14 @@ class Rent_Table :
         self.stbook = self.getTable[0]
         
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.book = self.book.set_index('BOOK_ISBN',drop= False)
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
-        print(self.book.loc[self.stbook,'BOOK_TITLE'])
-        self.new_rent = pd.DataFrame({'RENT_ISBN' : [self.book.loc[self.stbook,'BOOK_TITLE']],
-        'RENT_BOOK' : [self.book.loc[self.stbook,'BOOK_TITLE']] ,
+
+        print(self.book)
+        
+        self.new_rent = pd.DataFrame({'RENT_ISBN' : self.book.loc[self.stbook,'BOOK_ISBN'],
+        'RENT_BOOK' : [self.book['BOOK_TITLE',self.stbook]] ,
         'RENT_USER' : [self.stuser],
         'RENTAL_DATA' : [RentDay],
         'RETURN_DATA' : [ReturnDay],
