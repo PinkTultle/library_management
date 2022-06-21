@@ -231,7 +231,7 @@ class MainStart() :
         #렌트테이블에 있는 회원만 검색, 추출필요 혹은 유저 테이블에 대여가능 권수가 3이 아닌 회원만 추출
         #
         self.user = self.user[self.user['USER_RENT_CNT'] != '3']
-        self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         self.user = self.user.reset_index(drop=True)
 
         self.Search_User(self.user,'','이름','도서 반납')
@@ -248,20 +248,20 @@ class MainStart() :
 
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.del_user = self.user[self.user['USER_OUT_DATE'] != '0']
-        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         self.del_user = self.del_user.reset_index(drop=True)
 
         self.Search_User(self.del_user,'','이름','탈퇴 회원')
         self.tree.bind('<Double-Button-1>',self.return_user)
 
-    def return_user(self,stbook):
+    def return_user(self):
 
         double_click = self.tree.focus()
         self.getTable = self.tree.item(double_click).get('values')
         power = self.user.loc[self.user['USER_PHONE'] == self.getTable[0]]
-
-        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        self.book.loc[stbook,'BOOK_PRE'] = '0'
+        print(power)
+        self.book = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.book.loc['USER_OUT_DATE'] = 0
         self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
         print('호잇')
 
@@ -284,6 +284,8 @@ class MainStart() :
         if self.search_Entry.get() == '':
             self.Search_book(self.book,'',self.Phone_combobox.get())
 
+    #회원 검색 기능
+
     def user_search(self,search_DP):
         if self.Phone_combobox.get() == '이름':
             self.search = search_DP[search_DP["USER_NAME"].str.contains(self.search_Entry.get())]
@@ -297,7 +299,7 @@ class MainStart() :
             self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
 
         if self.search_Entry.get() == '':
-            self.Search_User(search_DP,'',self.Phone_combobox.get(),self.labeltitle)
+            self.Search_User(self.user,'','이름',self.labeltitle)
 
 
     def reflash(self) : #csv 파일 다시 불러오는 파일
@@ -333,32 +335,25 @@ class MainStart() :
 
 
     def Return(self,del_rentuser,del_rent) :
-    
+
         # del_rentuser 반납 회원 전화번호
         # del_rent 반납 도서 ISBN
+        
+        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
-        self.rent = self.rent.set_index('RENT_ISBN', drop=False)
-        del_rentuser = input("반납할 회원의 전화번호를 입력하시오.\n>>")
+
+        #self.rent = self.rent.set_index('RENT_ISBN', drop=False)
 
 
-        if del_rentuser not in self.rent['RENT_USER'].values :
-            print("대여한 도서가 없습니다.")
-            return
-        del_rent = input("반납할 도서의 ISBN을 입력하시오.\n>>")
-        if del_rent in self.rent['RENT_ISBN'].values :
-                abc = str(int(self.rent[self.rent['RENT_ISBN'] == del_rent]['RENT_ISBN']))
-                self.rent.drop(index=abc, axis=0, inplace=True)
-                self.rent.to_csv('csv/RENT.csv', index=False, encoding='utf-8',header= True)
-        else:
-            print("대여 하지 않은 책입니다.")
-            return
+        self.user = self.user.astype({'USER_RENT_CNT':int})
+        self.user.loc[del_rentuser,'USER_RENT_CNT'] += 1 
+        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
 
-        self.user_table = self.user_table.astype({'USER_RENT_CNT':int})
-        self.user_table.loc[del_rentuser,'USER_RENT_CNT'] += 1 
-        self.user_table.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True) 
+        self.book.loc[del_rent,'BOOK_PRE'] = True
+        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
 
-        self.book_table.loc[del_rent,'BOOK_PRE'] = True
-        self.book_table.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+        self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
 
 
         

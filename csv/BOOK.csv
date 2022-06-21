@@ -1,5 +1,6 @@
 BOOK_ISBN,BOOK_TITLE,BOOK_AUTHOR,BOOK_PUB,BOOK_PRICE,BOOK_LINK,BOOK_IMAGE,BOOK_DESCRIPTION,BOOK_PRE
-12341234132,냥냥 라이온,두현,512호,12000,하하,BOOK_IMAGE/12341234132.gif,반가워용,True
-12345,호이호이,빠밥ㅁ,냥냥,123333,dada,BOOK_IMAGE/12345.gif,dada,True
-124213,빠라빠,ㅇ망ㅁ,하하,12000,ㅇㅁㅇㅁㅇ,BOOK_IMAGE/124213.gif,ㅇㅁㅇㅁㅇㅁ,True
-1234567,ㅊ닟니,아아,하하,1231,ㅇㅁㅇㅁ,BOOK_IMAGE/1234567.gif,ㅇㅁㅇㅁ,True
+123123,냥냥 라이온,두현,512호,12000,하하,BOOK_IMAGE/12341234132.gif,반가워용,False
+11111,호이호이,빠밥ㅁ,냥냥,123333,dada,BOOK_IMAGE/12345.gif,dada,False
+55555,빠라빠,ㅇ망ㅁ,하하,12000,ㅇㅁㅇㅁㅇ,BOOK_IMAGE/124213.gif,ㅇㅁㅇㅁㅇㅁ,False
+5454,ㅊ닟니,아아,하하,1231,ㅇㅁㅇㅁ,BOOK_IMAGE/1234567.gif,ㅇㅁㅇㅁ,False
+12341241,ㄹㅈㄹ,ㅈㄹㅈ,ㄹㄷㅈㄹ,12313123,ㄹㅈㄷ,BOOK_IMAGE/12341241.gif,ㄹㅈㄷ,False

@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pandas as pd
 from datetime import datetime, timedelta
+from tkinter import messagebox
 
 
 Day = datetime.now()
@@ -55,9 +56,9 @@ class Rent_Table :
         self.book_tree.heading("출판사",text="출판사",anchor=W)
 
         
-        self.book = self.book[self.book['BOOK_PRE'] != False]
+        self.book = self.book[self.book['BOOK_PRE'] == 'True']
 
-        for i in range(len(self.book.index)) :
+        for i in self.book.index.tolist() :
             self.book_tree.insert('', 'end', text=i,values=list(self.book.loc[i])) 
 
         self.book_tree.place(x=30,y=90,width=540,height=250)
@@ -69,29 +70,40 @@ class Rent_Table :
 
     def rant(self, event ) :
 
-        self.stuser = self.user_num
+        self.stuser = str(self.user_num)
 
         double_click = self.book_tree.focus()
         self.getTable = self.book_tree.item(double_click).get('values')
         
-        self.stbook = self.getTable[0]
-        
+        self.stbook = str(self.getTable[0])
+        print(self.stbook)
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
+        self.book = self.book.set_index('BOOK_ISBN', drop=False)
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.user = self.user.set_index('USER_PHONE', drop=False)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
-        print(self.book.loc[self.stbook,'BOOK_TITLE'])
-        self.new_rent = pd.DataFrame({'RENT_ISBN' : [self.book.loc[self.stbook,'BOOK_TITLE']],
-        'RENT_BOOK' : [self.book.loc[self.stbook,'BOOK_TITLE']] ,
+
+        self.new_rent = pd.DataFrame({'RENT_ISBN' : self.stbook,
+        'RENT_BOOK' : self.book.loc[self.stbook,'BOOK_TITLE'] ,
         'RENT_USER' : [self.stuser],
         'RENTAL_DATA' : [RentDay],
         'RETURN_DATA' : [ReturnDay],
-        'RETURN_VALUE' : [self.book.loc[self.stbook,'BOOK_PRE']]})  
-        
+        'RETURN_VALUE' : [self.book.loc[self.stbook,'BOOK_PRE']]})
+        self.new_rent = self.new_rent.set_index('RENT_ISBN', drop=False) 
+
         self.user = self.user.astype({'USER_RENT_CNT':int})
         self.user.loc[self.stuser,'USER_RENT_CNT'] -= 1 
-        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
+        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= None, header= True)
 
         self.book.loc[self.stbook,'BOOK_PRE'] = False
-        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= None, header= True)
 
         self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
+        messagebox.showinfo("도서대여", "도서 대여 성공")
+        self.quit()
+
+
+    def quit(self) :
+        self.wind.quit()
+        self.wind.destroy()
+        

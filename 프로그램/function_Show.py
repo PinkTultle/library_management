@@ -105,7 +105,7 @@ class Show_info:
 
         self.check_button = Button(self.window, text="수정",width =10,command=self.edit_user)
         self.check_button.place(x=x,y=y+240)
-        self.check_button = Button(self.window, text="삭제",width =10)
+        self.check_button = Button(self.window, text="삭제",width =10, command=self.del_user)
         self.check_button.place(x=x+100,y=y+240)
         self.cancle_button = Button(self.window,text="취소",width=10,command=self.quit)
         self.cancle_button.place(x=x+200,y=y+240)
@@ -146,6 +146,15 @@ class Show_info:
     def quit(self) :
         self.window.quit()
         self.window.destroy()
+
+    def del_user(self):
+        df_user = pd.read_csv(User_CSV, encoding='utf-8')
+        df_user = df_user.set_index(df_user['USER_PHONE'])
+        df_user["USER_OUT_DATE"].loc[self.gwak[0]] = 1
+        df_user.to_csv(User_CSV, index=False, encoding='utf-8')
+        messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
+        self.quit()
+
 
     def edit_user(self) :
 
@@ -209,7 +218,7 @@ class Show_info:
         except :
             self.new_user_image = Image.open(self.gwak[5])
         
-        self.new_user_image.save("IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
+        self.new_user_image.save("USER_IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
         
         df_user["USER_IMAGE"].loc[self.gwak[0]] = "USER_IMAGE/" + str(self.Phone) + ".gif"
