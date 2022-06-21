@@ -150,80 +150,89 @@ class Show_info:
     def del_user(self):
         df_user = pd.read_csv(User_CSV, encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        df_user["USER_OUT_DATE"].loc[self.gwak[0]] = 1
-        df_user.to_csv(User_CSV, index=False, encoding='utf-8')
-        messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
+        if df_user["USER_RENT_CNT"].loc[self.gwak[0]] > 2:
+            df_user["USER_OUT_DATE"].loc[self.gwak[0]] = 1
+            df_user.to_csv(User_CSV, index=False, encoding='utf-8')
+            messagebox.showinfo("회원 정보 탈퇴", "회원 정보가 탈퇴되었습니다.")
+        else:
+            messagebox.showinfo("에러!", "도서 대여중인 회원은 탈퇴가 불가능 합니다.")
+        
         self.quit()
 
 
     def edit_user(self) :
-
+        
         df_user = pd.read_csv(User_CSV, encoding='utf-8')
         df_user = df_user.set_index(df_user['USER_PHONE'])
-        user_phone = df_user["USER_PHONE"].tolist()
 
-        self.Name = self.entry_name.get()
+        if df_user["USER_RENT_CNT"].loc[self.gwak[0]] > 2:
+            user_phone = df_user["USER_PHONE"].tolist()
 
-        self.P = self.Phone_combobox.get()
-        self.H = self.entry_phone1.get()
-        self.O = self.entry_phone2.get()
-        self.Phone = (self.P+'-' + self.H+ '-' + self.O)
+            self.Name = self.entry_name.get()
 
-        self.F = self.Fbirth_combobox.get()
-        self.S = self.Sbirth_combobox.get()
-        self.T = self.Tbirth_combobox.get()
-        self.Birth = self.F + self.S + self.T
+            self.P = self.Phone_combobox.get()
+            self.H = self.entry_phone1.get()
+            self.O = self.entry_phone2.get()
+            self.Phone = (self.P+'-' + self.H+ '-' + self.O)
 
-        self.Sex = self.Gender.get()
-        self.Email = self.entry_email.get()
+            self.F = self.Fbirth_combobox.get()
+            self.S = self.Sbirth_combobox.get()
+            self.T = self.Tbirth_combobox.get()
+            self.Birth = self.F + self.S + self.T
 
-        #user_phone = df_user["USER_PHONE"].tolist()
-        df_user["USER_PHONE"].loc[self.gwak[0]] = self.Phone
-        df_user["USER_NAME"].loc[self.gwak[0]] = self.Name
-        df_user["USER_BIRTH"].loc[self.gwak[0]] = self.Birth
-        df_user["USER_SEX"].loc[self.gwak[0]] = self.Sex
-        df_user["USER_MAIL"].loc[self.gwak[0]] = self.Email
-        user_phone.remove(self.gwak[0])
+            self.Sex = self.Gender.get()
+            self.Email = self.entry_email.get()
 
-        if self.entry_name.get() == "" :
-            messagebox.showerror("이름 에러","이름을 입력해주세요")
-            return 0
-        if self.Fbirth_combobox.get() =="선택" :
-            messagebox.showerror("생년월일 에러","년도를 선택해주세요")
-            return 0
-        if self.Gender.get() == "" :
-            messagebox.showerror('성별에러','성별을 선택해주세요')
-            return 0
-        if self.Phone_combobox.get() =="선택" :
-            messagebox.showerror("전화번호 에러","지역번호를 선택해주세요")
-            return 0
-        if  not self.H.isdigit() :
-            messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
-            return 0
-        if  not self.O.isdigit() :
-            messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
-            return 0
-        if len(self.entry_phone1.get()) > 5 or len(self.entry_phone2.get()) > 5:
-            messagebox.showerror("전화번호 에러", "전화번호 자리에 숫자를 5개 이상 입력하셨습니다.")
-            return 0
-        if (self.Phone) in user_phone :
-            messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
-            return 0
-        if self.entry_email.get() == "" or len(self.entry_email.get()) > 30 :
-            messagebox.showerror('이메일 에러','이메일 형식을 지켜주세요')
-            return 0
+            #user_phone = df_user["USER_PHONE"].tolist()
+            df_user["USER_PHONE"].loc[self.gwak[0]] = self.Phone
+            df_user["USER_NAME"].loc[self.gwak[0]] = self.Name
+            df_user["USER_BIRTH"].loc[self.gwak[0]] = self.Birth
+            df_user["USER_SEX"].loc[self.gwak[0]] = self.Sex
+            df_user["USER_MAIL"].loc[self.gwak[0]] = self.Email
+            user_phone.remove(self.gwak[0])
 
-        try :
-            self.new_user_image = Image.open(self.userfilename)
-        except :
-            self.new_user_image = Image.open(self.gwak[5])
-        
-        self.new_user_image.save("USER_IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
+            if self.entry_name.get() == "" :
+                messagebox.showerror("이름 에러","이름을 입력해주세요")
+                return 0
+            if self.Fbirth_combobox.get() =="선택" :
+                messagebox.showerror("생년월일 에러","년도를 선택해주세요")
+                return 0
+            if self.Gender.get() == "" :
+                messagebox.showerror('성별에러','성별을 선택해주세요')
+                return 0
+            if self.Phone_combobox.get() =="선택" :
+                messagebox.showerror("전화번호 에러","지역번호를 선택해주세요")
+                return 0
+            if  not self.H.isdigit() :
+                messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
+                return 0
+            if  not self.O.isdigit() :
+                messagebox.showerror("전화번호 에러","숫자만 입력해주세요")
+                return 0
+            if len(self.entry_phone1.get()) > 5 or len(self.entry_phone2.get()) > 5:
+                messagebox.showerror("전화번호 에러", "전화번호 자리에 숫자를 5개 이상 입력하셨습니다.")
+                return 0
+            if (self.Phone) in user_phone :
+                messagebox.showerror('전화번호 중복','전화번호가 중복되었습니다.')
+                return 0
+            if self.entry_email.get() == "" or len(self.entry_email.get()) > 30 :
+                messagebox.showerror('이메일 에러','이메일 형식을 지켜주세요')
+                return 0
 
-        
-        df_user["USER_IMAGE"].loc[self.gwak[0]] = "USER_IMAGE/" + str(self.Phone) + ".gif"
-        df_user.to_csv(User_CSV, index=False, encoding='utf-8')
+            try :
+                self.new_user_image = Image.open(self.userfilename)
+            except :
+                self.new_user_image = Image.open(self.gwak[5])
+            
+            self.new_user_image.save("USER_IMAGE/" + str(self.Phone) + ".gif",'GIF')     # 이미지 저장
 
-        messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
-        self.quit()
+            
+            df_user["USER_IMAGE"].loc[self.gwak[0]] = "USER_IMAGE/" + str(self.Phone) + ".gif"
+            df_user.to_csv(User_CSV, index=False, encoding='utf-8')
+
+            messagebox.showinfo("회원 정보 수정", "회원 정보가 수정되었습니다.")
+            self.quit()
      
+        else:
+            messagebox.showerror("에러", "도서 반납 후 수정하세요.")
+            self.quit()
