@@ -248,7 +248,7 @@ class MainStart() :
 
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.del_user = self.user[self.user['USER_OUT_DATE'] != '0']
-        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         self.del_user = self.del_user.reset_index(drop=True)
 
         self.Search_User(self.del_user,'','이름','탈퇴 회원')
@@ -297,9 +297,8 @@ class MainStart() :
             self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
 
         if self.search_Entry.get() == '':
-            self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
-            self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
-            self.Search_User(self.user,'',self.Phone_combobox.get(),self.labeltitle)
+            self.Search_book(self.book,'',self.Phone_combobox.get())
+            self.Search_User(search_DP,'',self.Phone_combobox.get(),self.labeltitle)
 
 
     def reflash(self) : #csv 파일 다시 불러오는 파일
