@@ -81,7 +81,7 @@ class Rent_Table :
         self.getTable = self.book_tree.item(double_click).get('values')
         
         self.stbook = str(self.getTable[0])
-        print(self.stbook)
+
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
         self.book = self.book.set_index('BOOK_ISBN', drop=False)
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
@@ -104,7 +104,9 @@ class Rent_Table :
         self.book.to_csv('csv/BOOK.csv', mode= 'w', index= None, header= True)
 
         self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
-<<<<<<< HEAD
+
+        messagebox.showinfo("도서대여", "도서 대여 성공")
+        self.quit()
 
 
     def Load_return_table(self, Search_key) :
@@ -134,7 +136,7 @@ class Rent_Table :
 
         self.book_tree = ttk.Treeview(self.wind)
         
-        self.book_tree['columns'] = ("도서명","ISBN","대여중인 회원번호","대여일",'반납일')
+        self.book_tree['columns'] = ("도서명","ISBN","대여중인 회원번호","대여일",'반납예정일')
         
         self.book_tree.column("#0",width=0, stretch=NO)
         self.book_tree.column("도서명",anchor=W,width=140,minwidth=140, stretch=NO)
@@ -185,13 +187,12 @@ class Rent_Table :
         self.rent.loc[(self.rent['RENT_USER'] == self.stuser)]
         print(self.rent)
         #self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
-=======
-        messagebox.showinfo("도서대여", "도서 대여 성공")
-        self.quit()
+
+
 
 
     def quit(self) :
         self.wind.quit()
         self.wind.destroy()
         
->>>>>>> e5ab1f6ed4b939c711daa7b40e2427b4600d1670
+
