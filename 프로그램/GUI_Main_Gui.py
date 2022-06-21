@@ -248,7 +248,7 @@ class MainStart() :
 
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.del_user = self.user[self.user['USER_OUT_DATE'] != '0']
-        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.del_user = self.del_user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         self.del_user = self.del_user.reset_index(drop=True)
 
         self.Search_User(self.del_user,'','이름','탈퇴 회원')
@@ -297,6 +297,7 @@ class MainStart() :
             self.Search_User(self.search,self.search_Entry.get(),self.Phone_combobox.get(),self.labeltitle)
 
         if self.search_Entry.get() == '':
+            self.Search_book(self.book,'',self.Phone_combobox.get())
             self.Search_User(search_DP,'',self.Phone_combobox.get(),self.labeltitle)
 
 
