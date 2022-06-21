@@ -174,6 +174,7 @@ class Rent_Table :
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
         self.user = self.user.set_index('USER_PHONE', drop=False)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
+        self.user = self.user.set_index('RENT_ISBN', drop=False)
 
         
         self.user = self.user.astype({'USER_RENT_CNT':int})
@@ -183,10 +184,10 @@ class Rent_Table :
         self.book.loc[self.stbook,'BOOK_PRE'] = True
         self.book.to_csv('csv/BOOK.csv', mode= 'w', index= None, header= True)
 
+        self.rent.loc[self.stuser].drop(inplace=True)
 
-        self.rent.loc[(self.rent['RENT_USER'] == self.stuser)]
-        print(self.rent)
-        #self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
+        messagebox.showinfo("도서반납", "도서 반납 성공")
+        self.quit()
 
 
 
