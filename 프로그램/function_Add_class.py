@@ -321,6 +321,9 @@ class Add_Book ():
             ISBN = int(self.entry_isbn.get())
             if ISBN == '':
                 messagebox.showinfo("경고", "ISBN 칸은 비울 수 없습니다.")
+            elif len(ISBN) < 12:
+                messagebox.showinfo("경고", "ISBN 칸은 13자리 이상 입력하세요.")
+            else:
                 return 0
 
             if str(ISBN) in book_table['BOOK_ISBN'].values :
