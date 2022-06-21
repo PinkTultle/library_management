@@ -231,7 +231,7 @@ class MainStart() :
         #렌트테이블에 있는 회원만 검색, 추출필요 혹은 유저 테이블에 대여가능 권수가 3이 아닌 회원만 추출
         #
         self.user = self.user[self.user['USER_RENT_CNT'] != '3']
-        self.user = self.user[['USER_PHONE','USER_NAME','USER_RENT_CNT','USER_MAIL']]
+        self.user = self.user[['USER_PHONE','USER_NAME','USER_SEX','USER_RENT_CNT','USER_MAIL']]
         self.user = self.user.reset_index(drop=True)
 
         self.Search_User(self.user,'','이름','도서 반납')
@@ -254,14 +254,14 @@ class MainStart() :
         self.Search_User(self.del_user,'','이름','탈퇴 회원')
         self.tree.bind('<Double-Button-1>',self.return_user)
 
-    def return_user(self,stbook):
+    def return_user(self):
 
         double_click = self.tree.focus()
         self.getTable = self.tree.item(double_click).get('values')
         power = self.user.loc[self.user['USER_PHONE'] == self.getTable[0]]
-
-        self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        self.book.loc[stbook,'BOOK_PRE'] = '0'
+        print(power)
+        self.book = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.book.loc['USER_OUT_DATE'] = 0
         self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
         print('호잇')
 

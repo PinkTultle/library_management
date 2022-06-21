@@ -69,32 +69,32 @@ class Rent_Table :
 
     def rant(self, event ) :
 
-        self.stuser = self.user_num
+        self.stuser = str(self.user_num)
 
         double_click = self.book_tree.focus()
         self.getTable = self.book_tree.item(double_click).get('values')
         
-        self.stbook = self.getTable[0]
-        
+        self.stbook = str(self.getTable[0])
+        print(self.stbook)
         self.book = pd.read_csv('csv/BOOK.csv', encoding= 'utf-8', dtype= str)
-        self.book = self.book.set('BOOK_ISBN',drop= False)
+        self.book = self.book.set_index('BOOK_ISBN', drop=False)
         self.user = pd.read_csv('csv/USER.csv', encoding= 'utf-8', dtype= str)
+        self.user = self.user.set_index('USER_PHONE', drop=False)
         self.rent = pd.read_csv('csv/RENT.csv', encoding= 'utf-8', dtype= str)
 
-        print(self.book)
-        
-        self.new_rent = pd.DataFrame({'RENT_ISBN' : self.book.loc[self.stbook,'BOOK_ISBN'],
-        'RENT_BOOK' : [self.book['BOOK_TITLE',self.stbook]] ,
+        self.new_rent = pd.DataFrame({'RENT_ISBN' : self.stbook,
+        'RENT_BOOK' : self.book.loc[self.stbook,'BOOK_TITLE'] ,
         'RENT_USER' : [self.stuser],
         'RENTAL_DATA' : [RentDay],
         'RETURN_DATA' : [ReturnDay],
-        'RETURN_VALUE' : [self.book.loc[self.stbook,'BOOK_PRE']]})  
-        
+        'RETURN_VALUE' : [self.book.loc[self.stbook,'BOOK_PRE']]})
+        self.new_rent = self.new_rent.set_index('RENT_ISBN', drop=False) 
+        #
         self.user = self.user.astype({'USER_RENT_CNT':int})
         self.user.loc[self.stuser,'USER_RENT_CNT'] -= 1 
-        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= False, header= True)
+        self.user.to_csv('csv/USER.csv', mode = 'w' ,index= None, header= True)
 
         self.book.loc[self.stbook,'BOOK_PRE'] = False
-        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= False, header= None)
+        self.book.to_csv('csv/BOOK.csv', mode= 'w', index= None, header= True)
 
         self.new_rent.to_csv('csv/RENT.csv', mode='a', index = False, header= None)
